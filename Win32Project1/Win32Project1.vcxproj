@@ -151,11 +151,13 @@
     <None Include="shader.vertex" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="1.cpp" />
-    <ClCompile Include="2.cpp" />
-    <ClCompile Include="3.cpp" />
-    <ClCompile Include="4.cpp" />
-    <ClCompile Include="shader-triangle.cpp" />
+    <ClCompile Include="平移-旋转-缩放变换.cpp" />
+    <ClCompile Include="窗口.cpp" />
+    <ClCompile Include="三角形.cpp" />
+    <ClCompile Include="索引绘制.cpp" />
+    <ClCompile Include="线框球体.cpp" />
+    <ClCompile Include="星轨.cpp" />
+    <ClCompile Include="着色器.cpp" />
     <ClCompile Include="一致变量.cpp" />
   </ItemGroup>
   <ItemGroup>

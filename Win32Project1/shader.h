@@ -39,9 +39,9 @@ public:
 	{
 		glUseProgram(this->programId);
 	}
-	void changePos(GLuint& gScaleLocation) {
+	void getPos(GLuint& Location,const char* index) {
 		// 查询获取一致变量的位置
-		gScaleLocation = glGetUniformLocation(this->programId, "gScale");
+		Location = glGetUniformLocation(this->programId, index);
 	}
 	~Shader()
 	{

@@ -32,22 +32,28 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="1.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="4.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shader-triangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="一致变量.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="着色器.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="星轨.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="线框球体.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="三角形.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="窗口.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="平移-旋转-缩放变换.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="索引绘制.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

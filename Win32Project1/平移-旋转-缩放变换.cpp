@@ -8,10 +8,18 @@
 
 
 /*GLuint VBO1;
-GLuint gScaleLocation; // 位置中间变量
+
+// 平移变换一致变量的句柄引用
+GLuint gWorldLocation;
+
 
 const char* pVSFileName = "shader.vertex";
 const char* pFSFileName = "shader.frag";
+
+//四维矩阵
+struct Matrix4f {
+	float m[4][4];
+};
 
 static void RenderSceneCB()
 {
@@ -20,13 +28,37 @@ static void RenderSceneCB()
 	// 维护一个不断慢慢增大的静态浮点数
 	static float Scale = 0.0f;
 	Scale += 0.001f;
-	// 将值传递给shader
-	glUniform1f(gScaleLocation, sinf(Scale));
+	// 4x4的平移变换矩阵
+	Matrix4f World;
 
+	//平移变换-x以sin（scale）平移，保持y,z不变
+	/*World.m[0][0] = 1.0f; World.m[0][1] = 0.0f; World.m[0][2] = 0.0f; World.m[0][3] = sinf(Scale);
+	World.m[1][0] = 0.0f; World.m[1][1] = 1.0f; World.m[1][2] = 0.0f; World.m[1][3] = 0.0f;
+	World.m[2][0] = 0.0f; World.m[2][1] = 0.0f; World.m[2][2] = 1.0f; World.m[2][3] = 0.0f;
+	World.m[3][0] = 0.0f; World.m[3][1] = 0.0f; World.m[3][2] = 0.0f; World.m[3][3] = 1.0f;*/
+	
+	//旋转变换-以z为轴
+	/*World.m[0][0] = cosf(Scale); World.m[0][1] = -sinf(Scale); World.m[0][2] = 0.0f; World.m[0][3] = 0.0f;
+	World.m[1][0] = sinf(Scale); World.m[1][1] = cosf(Scale); World.m[1][2] = 0.0f; World.m[1][3] = 0.0f;
+	World.m[2][0] = 0.0f; World.m[2][1] = 0.0f; World.m[2][2] = 1.0f; World.m[2][3] = 0.0f;
+	World.m[3][0] = 0.0f; World.m[3][1] = 0.0f; World.m[3][2] = 0.0f; World.m[3][3] = 1.0f;*/
+
+/*	//缩放变换
+	World.m[0][0] = sinf(Scale); World.m[0][1] = 0.0f;        World.m[0][2] = 0.0f;        World.m[0][3] = 0.0f;
+	World.m[1][0] = 0.0f;        World.m[1][1] = cosf(Scale); World.m[1][2] = 0.0f;        World.m[1][3] = 0.0f;
+	World.m[2][0] = 0.0f;        World.m[2][1] = 0.0f;        World.m[2][2] = sinf(Scale); World.m[2][3] = 0.0f;
+	World.m[3][0] = 0.0f;        World.m[3][1] = 0.0f;        World.m[3][2] = 0.0f;        World.m[3][3] = 1.0f;
+
+ 
+	// 将矩阵数据加载到shader中
+	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
+
+	
+	// 如何绘制数据-位置
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
 		6 * sizeof(GL_FLOAT), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
-
+	// 如何绘制数据-颜色
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
 		6 * sizeof(GL_FLOAT), (GLvoid*)(3 * sizeof(GL_FLOAT)));
 	glEnableVertexAttribArray(1);
@@ -90,7 +122,7 @@ int main(int argc, char** argv)
 	//准备着色器程序
 	Shader shader(pVSFileName, pFSFileName);
 	shader.use();
-	shader.getPos(gScaleLocation,"gScale");
+	shader.getPos(gWorldLocation, "gWorld");
 
 	glutMainLoop();
 
