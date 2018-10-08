@@ -5,8 +5,10 @@
 
 // 包含着色器加载库
 #include "shader.h"
+#include "ogldev_util.h"
+#include "ogldev_pipeline.h"
 
-/*//顶点缓冲对象
+//顶点缓冲对象
 GLuint VBO1;
 
 // 索引缓冲对象的句柄
@@ -19,10 +21,6 @@ GLuint gWorldLocation;
 const char* pVSFileName = "shader.vertex";
 const char* pFSFileName = "shader.frag";
 
-//四维矩阵
-struct Matrix4f {
-	float m[4][4];
-};
 
 static void RenderSceneCB()
 {
@@ -31,18 +29,13 @@ static void RenderSceneCB()
 	// 维护一个不断慢慢增大的静态浮点数
 	static float Scale = 0.0f;
 	Scale += 0.001f;
-	// 4x4的平移变换矩阵
-	Matrix4f World;
 
-	World.m[0][0] = cosf(Scale); World.m[0][1] = 0.0f; World.m[0][2] = -sinf(Scale); World.m[0][3] = 0.0f;
-	World.m[1][0] = 0.0;         World.m[1][1] = 1.0f; World.m[1][2] = 0.0f; World.m[1][3] = 0.0f;
-	World.m[2][0] = sinf(Scale); World.m[2][1] = 0.0f; World.m[2][2] = cosf(Scale); World.m[2][3] = 0.0f;
-	World.m[3][0] = 0.0f;        World.m[3][1] = 0.0f; World.m[3][2] = 0.0f; World.m[3][3] = 1.0f;
-
-*//*
-
-	// 将矩阵数据加载到shader中
-	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0][0]);
+	// 实例化一个pipeline管线类对象，初始化配置好之后传递给shader
+	Pipeline p;
+	p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+	p.WorldPos(sinf(Scale), 0.0f, 0.0f);
+	p.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetWorldTrans());
 
 
 	// 如何绘制数据-位置
@@ -84,7 +77,7 @@ static void CreateVertexBuffer()
 		-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 0.0f ,1.0f, 0.0f, 0.0f };
+		1.0f, 1.0f, 0.0f ,1.0f, 0.0f, 0.0f };	
 
 	glGenBuffers(1, &VBO1);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
@@ -144,4 +137,4 @@ int main(int argc, char** argv)
 	glutMainLoop();
 
 	return 0;
-}*/
+}

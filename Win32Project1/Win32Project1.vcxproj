@@ -151,10 +151,14 @@
     <None Include="shader.vertex" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ogldev_math_3d.cpp" />
+    <ClCompile Include="ogldev_pipeline.cpp" />
+    <ClCompile Include="ogldev_util.cpp" />
+    <ClCompile Include="索引绘制.cpp" />
     <ClCompile Include="平移-旋转-缩放变换.cpp" />
     <ClCompile Include="窗口.cpp" />
     <ClCompile Include="三角形.cpp" />
-    <ClCompile Include="索引绘制.cpp" />
+    <ClCompile Include="复合变换.cpp" />
     <ClCompile Include="线框球体.cpp" />
     <ClCompile Include="星轨.cpp" />
     <ClCompile Include="着色器.cpp" />
@@ -162,7 +166,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="math3d.h" />
+    <ClInclude Include="matrix3x3.h" />
+    <ClInclude Include="matrix4x4.h" />
+    <ClInclude Include="ogldev_math_3d.h" />
+    <ClInclude Include="ogldev_pipeline.h" />
+    <ClInclude Include="ogldev_types.h" />
+    <ClInclude Include="ogldev_util.h" />
+    <ClInclude Include="popback1.h" />
+    <ClInclude Include="pushpack1.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Win32Project1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
