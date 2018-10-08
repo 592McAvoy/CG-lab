@@ -3,10 +3,14 @@
 #include <math.h>
 
 
-/*// 包含着色器加载库
+// 包含着色器加载库
 #include "shader.h"
 #include "ogldev_util.h"
 #include "ogldev_pipeline.h"
+
+/*#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
 
 //顶点缓冲对象
 GLuint VBO1;
@@ -16,6 +20,10 @@ GLuint IBO;
 
 // 平移变换一致变量的句柄引用
 GLuint gWorldLocation;
+
+// 透视变换配置参数数据结构
+PersProjInfo gPersProjInfo;
+
 
 
 const char* pVSFileName = "shader.vertex";
@@ -28,14 +36,16 @@ static void RenderSceneCB()
 
 	// 维护一个不断慢慢增大的静态浮点数
 	static float Scale = 0.0f;
-	Scale += 0.001f;
+	Scale += 0.01f;
+	
 
-	// 实例化一个pipeline管线类对象，初始化配置好之后传递给shader
-	Pipeline p;
-	p.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
-	p.WorldPos(0.0f, sinf(Scale), 0.0f);
-	p.Rotate(sinf(Scale) * 40.0f, 0, sinf(Scale) * 40.0f);
-	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetWorldTrans());
+	static Pipeline p;
+	p.Rotate(0.0f, Scale, 0.0f);
+	p.WorldPos(0.0f, 0.0f, 6.0f);
+	// 设置投影变换的参数
+	p.SetPerspectiveProj(gPersProjInfo);
+
+	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, (const GLfloat*)p.GetWPTrans());
 
 
 	// 如何绘制数据-位置
@@ -77,7 +87,7 @@ static void CreateVertexBuffer()
 		-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-		1.0f, 1.0f, 0.0f ,1.0f, 0.0f, 0.0f };	
+		1.0f, 1.0f, 0.0f ,1.0f, 0.0f, 0.0f };
 
 	glGenBuffers(1, &VBO1);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
@@ -108,11 +118,20 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(500, 400);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("Tutorial 04");
 
 	InitializeGlutCallbacks();
+
+	
+
+	// 初始化透视变换配置参数
+	gPersProjInfo.FOV = 45.0f;
+	gPersProjInfo.Height = WINDOW_HEIGHT;
+	gPersProjInfo.Width = WINDOW_WIDTH;
+	gPersProjInfo.zNear = 1.0f;
+	gPersProjInfo.zFar = 100.0f;
 
 	// 必须在glut初始化后！
 	GLenum res = glewInit();
@@ -137,4 +156,5 @@ int main(int argc, char** argv)
 	glutMainLoop();
 
 	return 0;
-}*/
+}
+*/

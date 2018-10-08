@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>  // GLUTÍ¼ÐÎ¿â
+#include <GL/freeglut.h>
 #include <iterator>     // std::istreambuf_iterator
 #include <string>       
 #include <vector>
