@@ -1,4 +1,7 @@
 /Debug
 /packages
+/Common
+/Content
+/Include
 *.db
 *.opendb

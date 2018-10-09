@@ -11,7 +11,7 @@
 #include "ogldev_glut_backend.h"
 #include "ogldev_pipeline.h"
 
-
+/*
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -191,3 +191,4 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+*/

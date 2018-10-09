@@ -89,10 +89,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\罗宇辰\作业\大三上\CG\Win32Project1\Include;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\ImageMagick-6;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\GLFW;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\GL;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\ATB;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\罗宇辰\作业\大三上\CG\Win32Project1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp-vc140-mt.lib;CORE_DB_Magick++_.lib;CORE_RL_Magick++_.lib;fltkd.lib;wsock32.lib;comctl32.lib;fltkjpegd.lib;fltkimagesd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -152,50 +155,34 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="cubemap_texture.cpp" />
     <ClCompile Include="glut_backend.cpp" />
+    <ClCompile Include="io_buffer.cpp" />
+    <ClCompile Include="load.cpp" />
+    <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="ogldev_app.cpp" />
     <ClCompile Include="ogldev_atb.cpp" />
     <ClCompile Include="ogldev_backend.cpp" />
+    <ClCompile Include="ogldev_basic_lighting.cpp" />
+    <ClCompile Include="ogldev_basic_mesh.cpp" />
+    <ClCompile Include="ogldev_glfw_backend.cpp" />
     <ClCompile Include="ogldev_math_3d.cpp" />
     <ClCompile Include="ogldev_pipeline.cpp" />
+    <ClCompile Include="ogldev_shadow_map_fbo.cpp" />
+    <ClCompile Include="ogldev_skinned_mesh.cpp" />
+    <ClCompile Include="ogldev_texture.cpp" />
     <ClCompile Include="ogldev_util.cpp" />
+    <ClCompile Include="ogldev_vulkan.cpp" />
+    <ClCompile Include="ogldev_vulkan_core.cpp" />
+    <ClCompile Include="ogldev_win32_control.cpp" />
+    <ClCompile Include="ogldev_xcb_control.cpp" />
+    <ClCompile Include="random_texture.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="相机.cpp" />
-    <ClCompile Include="索引绘制.cpp" />
-    <ClCompile Include="平移-旋转-缩放变换.cpp" />
-    <ClCompile Include="窗口.cpp" />
-    <ClCompile Include="三角形.cpp" />
-    <ClCompile Include="复合变换.cpp" />
-    <ClCompile Include="线框球体.cpp" />
-    <ClCompile Include="星轨.cpp" />
-    <ClCompile Include="着色器.cpp" />
-    <ClCompile Include="一致变量.cpp" />
-    <ClCompile Include="透视投影.cpp" />
+    <ClCompile Include="technique.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="math3d.h" />
-    <ClInclude Include="matrix3x3.h" />
-    <ClInclude Include="matrix4x4.h" />
-    <ClInclude Include="ogldev_app.h" />
-    <ClInclude Include="ogldev_atb.h" />
-    <ClInclude Include="ogldev_backend.h" />
-    <ClInclude Include="ogldev_callbacks.h" />
-    <ClInclude Include="ogldev_camera.h" />
-    <ClInclude Include="ogldev_glut_backend.h" />
-    <ClInclude Include="ogldev_keys.h" />
-    <ClInclude Include="ogldev_math_3d.h" />
-    <ClInclude Include="ogldev_pipeline.h" />
-    <ClInclude Include="ogldev_types.h" />
-    <ClInclude Include="ogldev_util.h" />
-    <ClInclude Include="popback1.h" />
-    <ClInclude Include="pushpack1.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="mesh.h" />
     <ClInclude Include="shader.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="vector3.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Win32Project1.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -63,7 +63,7 @@ static void CreateVertexBuffer()
 /**
 * 主函数
 */
-/*int main(int argc, char ** argv) {
+int main(int argc, char ** argv) {
 
 	// 初始化GLUT
 	glutInit(&argc, argv);
@@ -97,5 +97,5 @@ static void CreateVertexBuffer()
 	glutMainLoop();
 
 	return 0;
-}*/
+}
 
