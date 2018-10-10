@@ -44,6 +44,7 @@ public:
 		// 查询获取一致变量的位置
 		Location = glGetUniformLocation(this->programId, index);
 	}
+	
 	~Shader()
 	{
 		if (this->programId)

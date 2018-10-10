@@ -95,7 +95,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\罗宇辰\作业\大三上\CG\Win32Project1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>assimp-vc140-mt.lib;CORE_DB_Magick++_.lib;CORE_RL_Magick++_.lib;fltkd.lib;wsock32.lib;comctl32.lib;fltkjpegd.lib;fltkimagesd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>CORE_DB_Magick++_.lib;assimp-vc140-mt.lib;fltkd.lib;wsock32.lib;comctl32.lib;fltkjpegd.lib;fltkimagesd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,7 +158,6 @@
     <ClCompile Include="cubemap_texture.cpp" />
     <ClCompile Include="glut_backend.cpp" />
     <ClCompile Include="io_buffer.cpp" />
-    <ClCompile Include="load.cpp" />
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="ogldev_app.cpp" />
     <ClCompile Include="ogldev_atb.cpp" />
@@ -177,11 +176,13 @@
     <ClCompile Include="ogldev_win32_control.cpp" />
     <ClCompile Include="ogldev_xcb_control.cpp" />
     <ClCompile Include="random_texture.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="technique.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

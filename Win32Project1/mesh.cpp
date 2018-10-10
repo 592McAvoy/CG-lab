@@ -80,6 +80,7 @@ void Mesh::Clear()
 bool Mesh::LoadMesh(const std::string& Filename)
 {
     // Release the previously loaded mesh (if it exists)
+	printf("LoadMesh: %s\n", Filename.c_str());
     Clear();
     
     bool Ret = false;
@@ -99,6 +100,7 @@ bool Mesh::LoadMesh(const std::string& Filename)
 
 bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
 {  
+	printf("InitFromScene: %s\n", Filename.c_str());
     m_Entries.resize(pScene->mNumMeshes);
     m_Textures.resize(pScene->mNumMaterials);
 
@@ -108,8 +110,8 @@ bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
         InitMesh(i, paiMesh);
     }
 
-    //return InitMaterials(pScene, Filename);
-	return true;
+    return InitMaterials(pScene, Filename);
+	//return true;
 }
 
 void Mesh::InitMesh(unsigned int Index, const aiMesh* paiMesh)
@@ -147,6 +149,7 @@ void Mesh::InitMesh(unsigned int Index, const aiMesh* paiMesh)
 bool Mesh::InitMaterials(const aiScene* pScene, const std::string& Filename)
 {
     // Extract the directory part from the file name
+	printf("InitMaterials: %s\n", Filename.c_str());
     std::string::size_type SlashIndex = Filename.find_last_of("/");
     std::string Dir;
 
@@ -189,7 +192,7 @@ bool Mesh::InitMaterials(const aiScene* pScene, const std::string& Filename)
 		
         // Load a white texture in case the model does not include its own texture
         if (!m_Textures[i]) {
-            m_Textures[i] = new Texture(GL_TEXTURE_2D, "../Content/white.png");
+            m_Textures[i] = new Texture(GL_TEXTURE_2D, "../Content/1.png");
 
             Ret = m_Textures[i]->Load();
         }

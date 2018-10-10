@@ -29,6 +29,7 @@
 #include "ogldev_basic_lighting.h"
 #include "ogldev_glut_backend.h"
 #include "mesh.h"
+#include "Move.h"
 
 #define WINDOW_WIDTH  1920
 #define WINDOW_HEIGHT 1200
@@ -61,15 +62,20 @@ public:
         delete m_pEffect;
         delete m_pGameCamera;
         delete m_pMesh;
+		delete m_move;
     }
 
     bool Init()
     {
-        Vector3f Pos(3.0f, 7.0f, -10.0f);
-        Vector3f Target(0.0f, -0.2f, 1.0f);
-        Vector3f Up(0.0, 1.0f, 0.0f);
+        Vector3f Pos(3.0f, -2.5f, -10.0f);
+        Vector3f Target(0.5f, -0.2f, 1.0f);
+        Vector3f Up(2.0, 1.0f, 0.0f);
 
         m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
+
+		m_move = new Move(Target, Vector3f(-10.0f, 90.0f, 0.0f));
+
+		m_mode = 1;
       
         m_pEffect = new BasicLightingTechnique();
 
@@ -84,7 +90,7 @@ public:
 
         m_pMesh = new Mesh();
 
-        return m_pMesh->LoadMesh("buddha.obj");
+        return m_pMesh->LoadMesh("../Content/Starship.obj");
     }
 
     void Run()
@@ -121,12 +127,17 @@ public:
 
         m_pEffect->SetSpotLights(1, &sl);
 
+		m_move->setMode(m_mode);
+
         Pipeline p;
-        p.Scale(0.1f, 0.1f, 0.1f);
-        p.Rotate(0.0f, m_scale, 0.0f);
-        p.WorldPos(0.0f, 0.0f, 10.0f);
+        p.Scale(0.3f, 0.3f, 0.3f);
+        //p.Rotate(-30.0f, 90.0f, 0.0f);
+		p.Rotate(m_move->getRotation(m_scale).x, m_move->getRotation(m_scale).y, m_move->getRotation(m_scale).z);
+        p.WorldPos(m_move->getPos(m_scale).x, m_move->getPos(m_scale).y, m_move->getPos(m_scale).z);
         p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
         p.SetPerspectiveProj(m_persProjInfo);
+
+
         m_pEffect->SetWVP(p.GetWVPTrans());
         m_pEffect->SetWorldMatrix(p.GetWorldTrans());
         m_pEffect->SetDirectionalLight(m_directionalLight);
@@ -160,6 +171,12 @@ public:
         case OGLDEV_KEY_x:
             m_directionalLight.DiffuseIntensity -= 0.05f;
             break;
+		case OGLDEV_KEY_0:
+			m_mode = 0;
+			break; 
+		case OGLDEV_KEY_1:
+			m_mode = 1;
+			break;
         default:
             m_pGameCamera->OnKeyboard(OgldevKey);				
         }
@@ -179,6 +196,8 @@ private:
     DirectionalLight m_directionalLight;
     Mesh* m_pMesh;
     PersProjInfo m_persProjInfo;	
+	Move* m_move;
+	int m_mode;
 };
 
 
@@ -187,7 +206,7 @@ int main(int argc, char** argv)
 //    Magick::InitializeMagick(*argv);
     GLUTBackendInit(argc, argv, true, false);
 
-    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "Tutorial 22")) {
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "ÎÞÈË»ú")) {
         return 1;
     }
 

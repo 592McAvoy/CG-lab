@@ -173,7 +173,7 @@ int main(int argc, char** argv)
 
 	//load模型
 	m_pMesh = new Mesh();
-	m_pMesh->LoadMesh("../Content/BomberDrone.obj");
+	m_pMesh->LoadMesh("../Content/jeep.obj");
 
 	// 必须在glut初始化后！
 	GLenum res = glewInit();
@@ -191,9 +191,9 @@ int main(int argc, char** argv)
 
 
 	//准备着色器程序
-	Shader shader(pVSFileName, pFSFileName);
-	shader.use();
-	shader.getPos(gWorldLocation, "gWorld");
+	//Shader shader(pVSFileName, pFSFileName);
+	//shader.use();
+	//shader.getPos(gWorldLocation, "gWorld");
 
 	glutMainLoop();
 
