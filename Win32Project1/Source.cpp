@@ -75,7 +75,7 @@ public:
 
 		m_move = new Move(Target, Vector3f(-10.0f, 90.0f, 0.0f));
 
-		m_mode = 1;
+		m_mode = 2;
       
         m_pEffect = new BasicLightingTechnique();
 
@@ -176,6 +176,12 @@ public:
 			break; 
 		case OGLDEV_KEY_1:
 			m_mode = 1;
+			break;
+		case OGLDEV_KEY_2:
+			m_mode = 2;
+			break;
+		case OGLDEV_KEY_3:
+			m_mode = 3;
 			break;
         default:
             m_pGameCamera->OnKeyboard(OgldevKey);				
