@@ -188,6 +188,13 @@ public:
         }
     }
 
+	void MouseCB(OGLDEV_MOUSE OgldevMouse, OGLDEV_KEY_STATE OgldevKeyState, int x, int y) {
+		
+		Vector3f nn = m_pGameCamera->GetClickPos(x,y);
+		nn.Normalize();
+		Vector3f tar = m_pGameCamera->GetTarget();
+		printf("clickPos(%f,%f) target(%f,%f)\n", nn.x, nn.y, tar.x, tar.y);
+	}
 
     virtual void PassiveMouseCB(int x, int y)
     {

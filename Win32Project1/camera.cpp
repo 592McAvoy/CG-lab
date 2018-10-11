@@ -147,6 +147,27 @@ bool Camera::OnKeyboard(OGLDEV_KEY Key)
     return Ret;
 }
 
+Vector3f& Camera::GetClickPos(int x, int y) {
+	const int DeltaX = x - m_mousePos.x;
+	const int DeltaY = y - m_mousePos.y;
+
+	float aH = m_AngleH + (float)DeltaX / 20.0f;
+	float aY = m_AngleV + (float)DeltaY / 20.0f;
+
+	Vector3f Vaxis(0.0f, 1.0f, 0.0f);
+
+	// Rotate the view vector by the horizontal angle around the vertical axis
+	Vector3f View(1.0f, 0.0f, 0.0f);
+	View.Rotate(aH, Vaxis);
+	View.Normalize();
+
+	// Rotate the view vector by the vertical angle around the horizontal axis
+	Vector3f Haxis = Vaxis.Cross(View);
+	Haxis.Normalize();
+	View.Rotate(aY, Haxis);
+
+	return View;
+}
 
 void Camera::OnMouse(int x, int y)
 {
