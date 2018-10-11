@@ -2,17 +2,17 @@
 
 layout(location = 0) in vec3 position;
 //layout(location = 1) in vec3 color;
-layout (location = 1) in vec2 TexCoord;
+//layout (location = 1) in vec2 TexCoord;
 
 //out vec3 vertColor;
-//out vec4 Color;
-out vec2 TexCoord0;
+out vec4 Color;
+//out vec2 TexCoord0;
 
 
 uniform float gScale;
 
 // 平移变换聚矩阵一致变量
-uniform mat4 gWorld;
+uniform mat4 gball;
 
 
 void main()
@@ -22,12 +22,12 @@ void main()
 	//gl_Position = vec4(gScale * position.x, gScale * position.y, position.z, 1.0); // 为glVertexAttributePointer提供返回值
     
 	// 用平移变换矩阵乘以图形顶点位置对应的4X4矩阵相乘，完成平移变换
-    gl_Position = gWorld * vec4(position, 1.0);
+    gl_Position = gball * vec4(position, 1.0);
 	
 	//vertColor = color;
-	//Color = vec4(clamp(position, 0.0, 1.0), 1.0);//颜色插值
+	Color = vec4(clamp(position, 0.0, 1.0), 1.0);//颜色插值
 	//Color = vec4(position, 1.0);//颜色插值
 
-	TexCoord0 = TexCoord;
+	//TexCoord0 = TexCoord;
 }
 

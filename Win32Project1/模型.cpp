@@ -29,7 +29,9 @@
 #include "ogldev_basic_lighting.h"
 #include "ogldev_glut_backend.h"
 #include "mesh.h"
+#include "skybox.h"
 #include "Move.h"
+#include "Ball.h"
 
 #define WINDOW_WIDTH  1920
 #define WINDOW_HEIGHT 1200
@@ -44,6 +46,9 @@ public:
     {
         m_pGameCamera = NULL;
         m_pEffect = NULL;
+		m_pSkyBox = NULL;
+		m_move = NULL;
+
         m_scale = 0.0f;
         m_directionalLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
         m_directionalLight.AmbientIntensity = 1.0f;
@@ -63,6 +68,7 @@ public:
         delete m_pGameCamera;
         delete m_pMesh;
 		delete m_move;
+		delete m_pSkyBox;
     }
 
     bool Init()
@@ -72,6 +78,8 @@ public:
         Vector3f Up(2.0, 1.0f, 0.0f);
 
         m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
+
+		m_ball = new Ball(m_pGameCamera, m_persProjInfo);
 
 		m_move = new Move(Target, Vector3f(-10.0f, 90.0f, 0.0f));
 
@@ -86,11 +94,24 @@ public:
 
         m_pEffect->Enable();
 
-        m_pEffect->SetColorTextureUnit(0);
+        m_pEffect->SetColorTextureUnit(0);		
 
         m_pMesh = new Mesh();
+		if (!m_pMesh->LoadMesh("../Content/phoenix_ugv.md2")) {
+			return false;
+		}
 
-        return m_pMesh->LoadMesh("../Content/Starship.obj");
+		m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
+		if (!m_pSkyBox->Init(".",
+			"../Content/sp3right.jpg",
+			"../Content/sp3left.jpg",
+			"../Content/sp3top.jpg",
+			"../Content/sp3bot.jpg",
+			"../Content/sp3front.jpg",
+			"../Content/sp3back.jpg")) {
+			return false;
+		}
+		return true;
     }
 
     void Run()
@@ -105,6 +126,7 @@ public:
         m_pGameCamera->OnRender();
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 
         PointLight pl[2];
         pl[0].DiffuseIntensity = 0.25f;
@@ -146,6 +168,12 @@ public:
         m_pEffect->SetMatSpecularPower(0);
 
         m_pMesh->Render();
+
+		m_ball->Init(Vector3f(0.0, 0.0, 0.0));
+		m_ball->Render();
+
+		m_pSkyBox->Render();
+		
 
         glutSwapBuffers();
     }
@@ -211,6 +239,8 @@ private:
     PersProjInfo m_persProjInfo;	
 	Move* m_move;
 	int m_mode;
+	Ball* m_ball;
+	SkyBox* m_pSkyBox;
 };
 
 

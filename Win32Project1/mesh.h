@@ -22,6 +22,7 @@
 #include <map>
 #include <vector>
 #include <GL/glew.h>
+#include <GL/glut.h>
 #include <Importer.hpp>      // C++ importer interface
 #include <scene.h>       // Output data structure
 #include <postprocess.h> // Post processing flags

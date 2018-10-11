@@ -4,25 +4,43 @@
 //普通前进
 Vector3f Move::NormalPos(float time) {
 	posTime += 0.01;
-	pos.x = 8 * sinf(0.05*posTime);
-	if (pos.y > 2 || pos.y <-2) {
-		direct = -direct;
+	
+	if (pos.y > 1 || pos.y <-5) {
+		directY = -directY;
 	}
-	pos.y += direct*0.0005;
-
+	if (pos.z > 10 || pos.y <0) {
+		directZ = -directZ;
+	}
+	directX = 12 * sinf(0.1*posTime)-pos.x > 0?1:-1;
+	pos.y += directY *  0.0005*(rand() % 6);
+	pos.x = 12 * sinf(0.1*posTime);
+	pos.z += directZ * 0.001*(rand() % 6);
 	return pos;
 }
 
 Vector3f Move::NormalRotate(float time) {
 	rotation.x = 0.5*sinf(2.0f*time);//模拟飞行时的小震动
-	rotation.z = -10.0f;
+	rotation.y = 10.0f + atan(0.001/cos(pos.x));
+	//rotation.z = -10.0f;
+	if ((directX>0) && (directY>0) && rotation.z < 30) {
+		rotation.z += 0.05;
+	}
+	if (directX<0 && directY>0 && rotation.z > -30) {
+		rotation.z -= 0.05;
+	}
+	if (directX>0 && directY<0 && rotation.z > -30) {
+		rotation.z -= 0.05;
+	}
+	if (directX<0 && directY<0 && rotation.z <30) {
+		rotation.z += 0.05;
+	}
 	return rotation;
 }
 
 //搜索
 Vector3f Move::SearchPos(float time) {
-	if (pos.y > 2 || pos.y <-3) {
-		direct = -direct;
+	if (pos.y > 1 || pos.y <-5) {
+		directY = -directY;
 	}
 
 	if (cosf(time/2) <= 0) {
@@ -31,8 +49,11 @@ Vector3f Move::SearchPos(float time) {
 	}
 	else {
 		posTime += 0.01;
+		directX = 8 * sinf(0.07*posTime) - pos.x > 0 ? 1 : -1;
+		
 		pos.x = 8 * sinf(0.07*posTime);
-		pos.y += direct*0.001;
+		pos.z = 8 * sinf(0.07*posTime);
+		pos.y += directY*0.001;
 		
 	}
 	return pos;
@@ -41,13 +62,24 @@ Vector3f Move::SearchPos(float time) {
 Vector3f Move::SearchRotate(float time) {
 	if (cosf(time/2) <= 0.5) {
 		rotateTime += 0.0035;
-		rotation.y = -50.0f + 45 * sinf(rotateTime);
-		rotation.z = -10.0f;
-		rotation.x = sinf(2.0f*time);//
+		rotation.y = 10.0f + 45 * sinf(rotateTime);
+		//rotation.x = sinf(2.0f*time);//
 	}
 	else {
 		rotation.x = 3*sinf(2.0f*time);//模拟飞行时的小震动
-		rotation.z = -10.0f;
+	}
+
+	if ((directX>0) && (directY>0) && rotation.z < 30) {
+		rotation.z += 0.05;
+	}
+	if (directX<0 && directY>0 && rotation.z > -30) {
+		rotation.z -= 0.05;
+	}
+	if (directX>0 && directY<0 && rotation.z > -30) {
+		rotation.z -= 0.05;
+	}
+	if (directX<0 && directY<0 && rotation.z <30) {
+		rotation.z += 0.05;
 	}
 
 	return rotation;
@@ -56,22 +88,26 @@ Vector3f Move::SearchRotate(float time) {
 // 随机运动
 Vector3f Move::RandomPos(float time) {
 	//到达时停顿500ms
-	if (GetTickCount() - arrive_time < 400.0f) {
+	if (GetTickCount() - arrive_time < 300.0f) {
 		return pos;
 	}
 	if (arrive) {
 		//生成新的目的地
 		rand_target = Vector3f(
-			0.01f*((rand() % 3 - 1)*rand() % 300 + 350),
+			0.01f*((rand() % 3 - 1)*rand() % 300 + 550),
 			0.01f*((rand() % 3 - 1)*rand() % 300),
-			0.01f*(rand() % 300));
+			0.01f*((rand() % 3 - 1)*rand() % 500));
 		arrive = false;
 		
 	}
+	directX = (rand_target.x > pos.x) ? 1 : -1;
+	directY = (rand_target.y > pos.y) ? 1 : -1;
+	directZ = (rand_target.z > pos.z) ? 1 : -1;
+
 	//向目的地前进
-	pos.x += (rand_target.x > pos.x) ? 0.005f : -0.005f;
-	pos.y += (rand_target.y > pos.y) ? 0.005f : -0.005f;
-	pos.z += (rand_target.z > pos.z) ? 0.005f : -0.005f;
+	pos.x += directX * 0.002 * (rand() % 8);
+	pos.y += directY * 0.002 * (rand() % 8);
+	pos.z += directZ * 0.002 * (rand() % 8);
 
 	//一定误差范围内，认为到达目的地
 	if (abs(rand_target.x - pos.x)<0.1&&abs(rand_target.y - pos.y)<0.1&&abs(rand_target.z - pos.z)<0.1) {
@@ -84,9 +120,26 @@ Vector3f Move::RandomPos(float time) {
 }
 Vector3f Move::RandomRotate(float time) {
 	
-	rotation.y = -50.0f;
-	rotation.x = 3*sinf(2*time);//模拟飞行时的小震动
-	rotation.z = -10.0f;
+	rotation.y = -50.0f+ atan(pos.z / pos.x);
+	rotation.x = 3*sinf(time);//模拟飞行时的小震动
+	rotation.z = 3 * sinf(2 * time) ;
+
+	if ((directX>0) && (directY>0) && rotation.x < 30) {
+		rotation.z += 0.05;
+		rotation.x += 0.05;
+	}
+	if (directX<0 && directY>0 && rotation.x > -30) {
+		rotation.x -= 0.05;
+		rotation.z -= 0.05;
+	}
+	if (directX>0 && directY<0 && rotation.x > -30) {
+		rotation.x -= 0.05;
+		rotation.z -= 0.05;
+	}
+	if (directX<0 && directY<0 && rotation.x <30) {
+		rotation.z += 0.05;
+		rotation.x += 0.05;
+	}
 	
 	
 	return rotation;
@@ -117,13 +170,13 @@ Vector3f Move::EscapePos(float time) {
 	}
 	else {
 		//向目的地前进
-		if (pos.y >3 || pos.y <-3) {
+		if (pos.y >3 || pos.y <-4) {
 			directY = -directY;
 		}
-		if (pos.x > 5 || pos.x <-3) {
+		if (pos.x > 6 || pos.x <-3) {
 			directX = -directX;
 		}
-		if (pos.z > 10 || pos.z <-1) {
+		if (pos.z > 10 || pos.z <-2) {
 			directZ = -directZ;
 		}
 		pos.x += directX*0.006;

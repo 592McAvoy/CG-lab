@@ -152,8 +152,11 @@
     <None Include="packages.config" />
     <None Include="shader.frag" />
     <None Include="shader.vertex" />
+    <None Include="skybox.fs" />
+    <None Include="skybox.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cubemap_texture.cpp" />
     <ClCompile Include="glut_backend.cpp" />
@@ -177,14 +180,19 @@
     <ClCompile Include="ogldev_win32_control.cpp" />
     <ClCompile Include="ogldev_xcb_control.cpp" />
     <ClCompile Include="random_texture.cpp" />
-    <ClCompile Include="Source.cpp" />
+    <ClCompile Include="skybox.cpp" />
+    <ClCompile Include="skybox_technique.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="technique.cpp" />
+    <ClCompile Include="天空.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="shader.h" />
+    <ClInclude Include="skybox.h" />
+    <ClInclude Include="skybox_technique.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
