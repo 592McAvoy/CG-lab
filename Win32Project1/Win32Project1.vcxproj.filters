@@ -16,12 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shader.frag">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="shader.vertex">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="skybox.fs">
       <Filter>Resource Files</Filter>
     </None>
@@ -31,9 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Move.h">
@@ -46,6 +37,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="skybox_technique.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="road.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

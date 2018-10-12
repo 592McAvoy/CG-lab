@@ -137,9 +137,9 @@ public:
 		m_move->setMode(m_mode);
 
         Pipeline p;        
-		p.Scale(0.1f, 0.1f, 0.1f);
-		p.Rotate(m_move->getRotation(m_scale).x, m_move->getRotation(m_scale).y, m_move->getRotation(m_scale).z);
+		p.Scale(0.1f, 0.1f, 0.1f);		
 		p.WorldPos(m_move->getPos(m_scale).x, m_move->getPos(m_scale).y, m_move->getPos(m_scale).z);
+		p.Rotate(m_move->getRotation(m_scale).x, m_move->getRotation(m_scale).y, m_move->getRotation(m_scale).z);
         p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
         p.SetPerspectiveProj(m_persProjInfo);
         
@@ -173,6 +173,9 @@ public:
 			break;
 		case OGLDEV_KEY_3:
 			m_mode = 3;
+			break;
+		case OGLDEV_KEY_4:
+			m_mode = 4;
 			break;
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
@@ -212,7 +215,7 @@ int main(int argc, char** argv)
 {
     GLUTBackendInit(argc, argv, true, false);
 
-    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "Tutorial 25")) {
+    if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "ÎÞÈË»ú")) {
         return 1;
     }
 

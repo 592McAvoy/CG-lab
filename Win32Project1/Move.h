@@ -10,6 +10,7 @@
 
 #include "ogldev_math_3d.h"
 #include "math.h"
+#include "road.h"
 
 class Move{
 private:
@@ -18,7 +19,6 @@ private:
 	Vector3f rotation;
 	float posTime;
 	float rotateTime;
-	int direct = -1;
 	int mode;
 
 	Vector3f rand_target;
@@ -29,9 +29,12 @@ private:
 	bool escape;
 	float escapeTime;
 	DWORD timer;
+	int direct = 1;
 	int directX = 1;
 	int directY = 1;
 	int directZ = 1;
+
+	Road road;
 
 
 	Vector3f NormalPos(float time);
@@ -46,6 +49,9 @@ private:
 	Vector3f EscapePos(float time);
 	Vector3f EscapeRotate(float time);
 
+	Vector3f TestPos(float time);
+	Vector3f TestRotate(float time);
+
 public:
 	Move(Vector3f init_pos, Vector3f init_rot) {
 		pos = init_pos;
@@ -57,6 +63,7 @@ public:
 		rand_target = Vector3f(0.0f, 0.0f, 0.0f);
 		arrive = true;
 		escape = false;
+		road = Road();
 	}
 
 	void setMode(int m) {
@@ -69,6 +76,7 @@ public:
 			case 1:return SearchPos(time);
 			case 2:return RandomPos(time);
 			case 3:return EscapePos(time);
+			case 4:return TestPos(time);
 			default:printf("mode error\n");
 				break;
 
@@ -83,6 +91,7 @@ public:
 			case 1:return SearchRotate(time);
 			case 2:return RandomRotate(time);
 			case 3:return EscapeRotate(time);
+			case 4:return TestRotate(time);
 			default:printf("mode error\n");
 				
 		}

@@ -122,12 +122,15 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>D:\罗宇辰\作业\大三上\CG\Win32Project1\Include;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\ImageMagick-6;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\GLFW;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\GL;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\ATB;D:\罗宇辰\作业\大三上\CG\Win32Project1\Include\assimp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\罗宇辰\作业\大三上\CG\Win32Project1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CORE_DB_Magick++_.lib;assimp-vc140-mt.lib;fltkd.lib;wsock32.lib;comctl32.lib;fltkjpegd.lib;fltkimagesd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -150,8 +153,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="shader.frag" />
-    <None Include="shader.vertex" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
   </ItemGroup>
@@ -190,7 +191,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="Move.h" />
-    <ClInclude Include="shader.h" />
+    <ClInclude Include="road.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="skybox_technique.h" />
   </ItemGroup>

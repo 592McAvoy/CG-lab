@@ -94,9 +94,9 @@ Vector3f Move::RandomPos(float time) {
 	if (arrive) {
 		//生成新的目的地
 		rand_target = Vector3f(
-			0.01f*((rand() % 3 - 1)*rand() % 300 + 550),
-			0.01f*((rand() % 3 - 1)*rand() % 300),
-			0.01f*((rand() % 3 - 1)*rand() % 500));
+			0.01f*((rand() % 3 - 1)*rand() % 1700),
+			0.01f*((rand() % 3 - 1)*rand() % 700),
+			0.01f*((rand() % 3 - 1)*rand() % 700));
 		arrive = false;
 		
 	}
@@ -205,5 +205,38 @@ Vector3f Move::EscapeRotate(float time) {
 	}
 	rotation.x = direct * 45 * abs(sinf(escapeTime));
 	
+	return rotation;
+}
+
+Vector3f Move::TestPos(float time) {
+	if (arrive) {
+		//生成新的目的地
+		rand_target = Vector3f(
+			0.01f*((rand() % 3 - 1)*rand() % 2000 ),
+			0.01f*((rand() % 3 - 1)*rand() % 1000),
+			0.01f*((rand() % 3 - 1)*rand() % 1000));
+		Vector3f rand_mid = Vector3f(
+			0.01f*((rand() % 3 - 1)*rand() % 2000),
+			0.01f*((rand() % 3 - 1)*rand() % 1000),
+			0.01f*((rand() % 3 - 1)*rand() % 1000));
+		arrive = false;
+		road.Init(pos, rand_mid, rand_target);
+
+	}
+
+	//向目的地前进
+	pos = road.getPoint();
+
+	//一定误差范围内，认为到达目的地
+	if (abs(rand_target.x - pos.x)<0.1&&abs(rand_target.y - pos.y)<0.1&&abs(rand_target.z - pos.z)<0.1) {
+		arrive = true;
+		arrive_time = GetTickCount();
+
+	}
+
+	return pos;
+}
+Vector3f Move::TestRotate(float time) {
+	rotation = road.getRotation();
 	return rotation;
 }
