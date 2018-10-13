@@ -13,8 +13,6 @@ private:
 	Vector3f newP;
 
 
-	
-
 public:	
 	Road() {}
 
@@ -31,7 +29,7 @@ public:
 		lastP = newP = start;
 	}
 	
-	//3½×±´Èû¶ûÇúÏß
+	//2½×±´Èû¶ûÇúÏß
 	Vector3f getPoint() {
 		float t = (double)cnt / pointNum;
 		float x = start.x * pow(1 - t, 2) + mid.x * (1 - t) * t * 2 + end.x * pow(t, 2);		
@@ -48,9 +46,10 @@ public:
 	}
 
 	Vector3f getRotation() {
-		float dx = newP.x - lastP.x;
-		float dy = newP.y - lastP.y;
-		float dz = newP.z - lastP.z;
+		float t = (double)cnt / pointNum;
+		float dx = -2* start.x * pow(1 - t, 2) + 2 * mid.x * (1 - 2 * t)  + end.x * 2 * t;
+		float dy = -2 * start.y * pow(1 - t, 2) + 2 * mid.y * (1 - 2 * t) + end.y * 2 * t;
+		float dz = -2 * start.z * pow(1 - t, 2) + 2 * mid.z * (1 - 2 * t) + end.z * 2 * t;
 
 		Vector3f rr(180 / 3.14 *atan( dy / dz), 180 / 3.14 *atan( dz / dx), 180 / 3.14 *atan( dy / dx));
 		//printf("rot %d: (%f, %f, %f) dx=%f dy=%f dz=%f\n", cnt, rr.x, rr.y, rr.z, dx, dy, dz);

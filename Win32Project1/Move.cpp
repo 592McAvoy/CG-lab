@@ -21,7 +21,7 @@ Vector3f Move::NormalPos(float time) {
 Vector3f Move::NormalRotate(float time) {
 	rotation.x = 0.5*sinf(2.0f*time);//模拟飞行时的小震动
 	rotation.y = 10.0f + atan(0.001/cos(pos.x));
-	//rotation.z = -10.0f;
+	
 	if ((directX>0) && (directY>0) && rotation.z < 30) {
 		rotation.z += 0.05;
 	}
@@ -87,7 +87,7 @@ Vector3f Move::SearchRotate(float time) {
 
 // 随机运动
 Vector3f Move::RandomPos(float time) {
-	//到达时停顿500ms
+	//到达时停顿
 	if (GetTickCount() - arrive_time < 300.0f) {
 		return pos;
 	}
@@ -95,7 +95,7 @@ Vector3f Move::RandomPos(float time) {
 		//生成新的目的地
 		rand_target = Vector3f(
 			0.01f*((rand() % 3 - 1)*rand() % 1700),
-			0.01f*((rand() % 3 - 1)*rand() % 700),
+			0.01f*((rand() % 3 - 1)*rand() % 400),
 			0.01f*((rand() % 3 - 1)*rand() % 700));
 		arrive = false;
 		
@@ -164,8 +164,7 @@ Vector3f Move::EscapePos(float time) {
 	if (abs(enemy_pos.x - pos.x)>2 && abs(enemy_pos.y - pos.y)>2 && abs(enemy_pos.z - pos.z)>1) {
 		escape = false;
 		arrive_time = GetTickCount();
-		//escapeTime = 0;
-		//printf("safe\n");
+	
 		
 	}
 	else {
@@ -208,16 +207,20 @@ Vector3f Move::EscapeRotate(float time) {
 	return rotation;
 }
 
+//测试随机轨迹飞行效果
 Vector3f Move::TestPos(float time) {
+	if (GetTickCount() - arrive_time < 200.0f) {
+		return pos;
+	}
 	if (arrive) {
 		//生成新的目的地
 		rand_target = Vector3f(
 			0.01f*((rand() % 3 - 1)*rand() % 2000 ),
-			0.01f*((rand() % 3 - 1)*rand() % 1000),
+			0.01f*((rand() % 3 - 1)*rand() % 500),
 			0.01f*((rand() % 3 - 1)*rand() % 1000));
 		Vector3f rand_mid = Vector3f(
 			0.01f*((rand() % 3 - 1)*rand() % 2000),
-			0.01f*((rand() % 3 - 1)*rand() % 1000),
+			0.01f*((rand() % 3 - 1)*rand() % 500),
 			0.01f*((rand() % 3 - 1)*rand() % 1000));
 		arrive = false;
 		road.Init(pos, rand_mid, rand_target);
