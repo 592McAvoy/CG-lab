@@ -3,5 +3,6 @@
 /Common
 /Content
 /Include
+/可能需要的dll文件
 *.db
 *.opendb

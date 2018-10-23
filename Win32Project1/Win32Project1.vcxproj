@@ -157,12 +157,13 @@
     <None Include="skybox.vs" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cubemap_texture.cpp" />
     <ClCompile Include="glut_backend.cpp" />
     <ClCompile Include="io_buffer.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="ogldev_app.cpp" />
     <ClCompile Include="ogldev_atb.cpp" />
@@ -185,11 +186,10 @@
     <ClCompile Include="skybox_technique.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="technique.cpp" />
-    <ClCompile Include="天空.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Ball.h" />
     <ClInclude Include="mesh.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="road.h" />
     <ClInclude Include="skybox.h" />
