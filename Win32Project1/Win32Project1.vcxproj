@@ -163,7 +163,7 @@
     <ClCompile Include="io_buffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
-    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="dynamicModel.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="ogldev_app.cpp" />
     <ClCompile Include="ogldev_atb.cpp" />
@@ -184,16 +184,20 @@
     <ClCompile Include="random_texture.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="skybox_technique.cpp" />
+    <ClCompile Include="staticModel.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="strategy.cpp" />
     <ClCompile Include="technique.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mesh.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="dynamicModel.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="road.h" />
     <ClInclude Include="skybox.h" />
     <ClInclude Include="skybox_technique.h" />
+    <ClInclude Include="staticModel.h" />
+    <ClInclude Include="strategy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

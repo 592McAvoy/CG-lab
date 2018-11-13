@@ -98,6 +98,27 @@ bool Mesh::LoadMesh(const std::string& Filename)
     return Ret;
 }
 
+bool Mesh::LoadMesh(const std::string& Filename, const std::string& Texturename)
+{
+	// Release the previously loaded mesh (if it exists)
+	printf("LoadMesh: %s\n", Filename.c_str());
+	Clear();
+
+	bool Ret = false;
+	Assimp::Importer Importer;
+
+	const aiScene* pScene = Importer.ReadFile(Filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+
+	if (pScene) {
+		Ret = InitFromScene(pScene, Filename, Texturename);
+	}
+	else {
+		printf("Error parsing '%s': '%s'\n", Filename.c_str(), Importer.GetErrorString());
+	}
+
+	return Ret;
+}
+
 bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
 {  
 	printf("InitFromScene: %s\n", Filename.c_str());
@@ -112,6 +133,21 @@ bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename)
 
     return InitMaterials(pScene, Filename);
 	//return true;
+}
+
+bool Mesh::InitFromScene(const aiScene* pScene, const std::string& Filename, const std::string& Texturename)
+{
+	printf("InitFromScene: %s\n", Filename.c_str());
+	m_Entries.resize(pScene->mNumMeshes);
+	m_Textures.resize(pScene->mNumMaterials);
+
+	// Initialize the meshes in the scene one by one
+	for (unsigned int i = 0; i < m_Entries.size(); i++) {
+		const aiMesh* paiMesh = pScene->mMeshes[i];
+		InitMesh(i, paiMesh);
+	}
+
+	return InitMaterials(pScene, Filename, Texturename);
 }
 
 void Mesh::InitMesh(unsigned int Index, const aiMesh* paiMesh)
@@ -192,13 +228,68 @@ bool Mesh::InitMaterials(const aiScene* pScene, const std::string& Filename)
 		
         // Load a white texture in case the model does not include its own texture
         if (!m_Textures[i]) {
-            m_Textures[i] = new Texture(GL_TEXTURE_2D, "../Content/1.png");
+            m_Textures[i] = new Texture(GL_TEXTURE_2D, "../Content/white.png");
 
             Ret = m_Textures[i]->Load();
         }
     }
 
     return Ret;
+}
+
+bool Mesh::InitMaterials(const aiScene* pScene, const std::string& Filename, const std::string& Texturename)
+{
+	// Extract the directory part from the file name
+	printf("InitMaterials: %s\n", Filename.c_str());
+	std::string::size_type SlashIndex = Filename.find_last_of("/");
+	std::string Dir;
+
+	if (SlashIndex == std::string::npos) {
+		Dir = ".";
+	}
+	else if (SlashIndex == 0) {
+		Dir = "/";
+	}
+	else {
+		Dir = Filename.substr(0, SlashIndex);
+	}
+
+	bool Ret = true;
+
+	// Initialize the materials
+	for (unsigned int i = 0; i < pScene->mNumMaterials; i++) {
+		const aiMaterial* pMaterial = pScene->mMaterials[i];
+
+		m_Textures[i] = NULL;
+
+		if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+			aiString Path;
+
+			if (pMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &Path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS) {
+				std::string FullPath = Dir + "/" + Path.data;
+				m_Textures[i] = new Texture(GL_TEXTURE_2D, FullPath.c_str());
+
+				if (!m_Textures[i]->Load()) {
+					printf("Error loading texture '%s'\n", FullPath.c_str());
+					delete m_Textures[i];
+					m_Textures[i] = NULL;
+					Ret = false;
+				}
+				else {
+					printf("Loaded texture '%s'\n", FullPath.c_str());
+				}
+			}
+		}
+
+		// Load a white texture in case the model does not include its own texture
+		if (!m_Textures[i]) {
+			m_Textures[i] = new Texture(GL_TEXTURE_2D, Texturename);
+
+			Ret = m_Textures[i]->Load();
+		}
+	}
+
+	return Ret;
 }
 
 void Mesh::Render()

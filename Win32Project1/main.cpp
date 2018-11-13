@@ -9,10 +9,11 @@
 #include "ogldev_basic_lighting.h"
 #include "ogldev_glut_backend.h"
 #include "skybox.h"
-#include "Model.h"
+#include "dynamicModel.h"
+#include "staticModel.h"
 
-#define WINDOW_WIDTH  1920
-#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH  1024
+#define WINDOW_HEIGHT 600
 
 
 class Game : public ICallbacks, public OgldevApp
@@ -26,7 +27,7 @@ public:
 		m_pSkyBox = NULL;
 		
 		m_fkr = NULL;
-		m_tank = NULL;
+		m_house = NULL;
 
 		m_dirLight.AmbientIntensity = 0.3f;
 		m_dirLight.DiffuseIntensity = 0.8f;
@@ -46,7 +47,7 @@ public:
 		SAFE_DELETE(m_pGameCamera);        
 		SAFE_DELETE(m_pSkyBox);
 		SAFE_DELETE(m_fkr);
-		SAFE_DELETE(m_tank);
+		SAFE_DELETE(m_house);
 	}
 
 
@@ -60,15 +61,15 @@ public:
 
 		m_mode = 0;
 
-		/*m_fkr = new Model(m_pGameCamera, m_persProjInfo, m_dirLight);
-		if (!m_fkr->Init("../Content/blacksmith/blacksmiths.obj")) {
-			return false;
-		}*/
-
-		m_tank = new Model(m_pGameCamera, m_persProjInfo, m_dirLight);
-		if (!m_tank->Init("../Content/BomberDrone/BomberDrone.obj")) {
+		m_fkr = new DynamicModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		if (!m_fkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
 			return false;
 		}
+
+		/*m_house = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		if (!m_house->Init("../Content/blacksmith/blacksmiths.obj", "../Content/blacksmith/blacksmiths.jpg")) {
+			return false;
+		}*/
 
 		m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
 		if (!m_pSkyBox->Init(".",
@@ -97,9 +98,9 @@ public:
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//m_fkr->Render(m_mode);
+		m_fkr->Render(m_mode);
 
-		m_tank->Render(0);
+		//m_house->Render();
 
 		m_pSkyBox->Render();
 
@@ -130,6 +131,9 @@ public:
 		case OGLDEV_KEY_4:
 			m_mode = 4;
 			break;
+		case OGLDEV_KEY_5:
+			m_mode = 5;
+			break;
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
 		}
@@ -156,8 +160,8 @@ private:
 	SkyBox* m_pSkyBox;
 	PersProjInfo m_persProjInfo;
 	int m_mode;
-	Model* m_fkr;
-	Model* m_tank;
+	DynamicModel* m_fkr;
+	StaticModel* m_house;
 
 };
 

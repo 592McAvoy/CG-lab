@@ -56,14 +56,19 @@ public:
     ~Mesh();
 
     bool LoadMesh(const std::string& Filename);
+	bool LoadMesh(const std::string& Filename, const std::string& Texturename);
 
     void Render();
 
 private:
 
     bool InitFromScene(const aiScene* pScene, const std::string& Filename);
+	bool InitFromScene(const aiScene* pScene, const std::string& Filename, const std::string& Texturename);
+
     void InitMesh(unsigned int Index, const aiMesh* paiMesh);
+
     bool InitMaterials(const aiScene* pScene, const std::string& Filename);
+	bool InitMaterials(const aiScene* pScene, const std::string& Filename, const std::string& Texturename);
     void Clear();
 
 #define INVALID_MATERIAL 0xFFFFFFFF

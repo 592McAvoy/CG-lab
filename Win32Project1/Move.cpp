@@ -59,31 +59,6 @@ Vector3f Move::SearchPos(float time) {
 	return pos;
 }
 
-Vector3f Move::SearchRotate(float time) {
-	if (cosf(time/2) <= 0.5) {
-		rotateTime += 0.0035;
-		rotation.y = 10.0f + 45 * sinf(rotateTime);
-		//rotation.x = sinf(2.0f*time);//
-	}
-	else {
-		rotation.x = 3*sinf(2.0f*time);//模拟飞行时的小震动
-	}
-
-	if ((directX>0) && (directY>0) && rotation.z < 30) {
-		rotation.z += 0.05;
-	}
-	if (directX<0 && directY>0 && rotation.z > -30) {
-		rotation.z -= 0.05;
-	}
-	if (directX>0 && directY<0 && rotation.z > -30) {
-		rotation.z -= 0.05;
-	}
-	if (directX<0 && directY<0 && rotation.z <30) {
-		rotation.z += 0.05;
-	}
-
-	return rotation;
-}
 
 // 随机运动
 Vector3f Move::RandomPos(float time) {
@@ -242,4 +217,31 @@ Vector3f Move::TestPos(float time) {
 Vector3f Move::TestRotate(float time) {
 	rotation = road.getRotation();
 	return rotation;
+}
+
+Vector3f Move::CalPos(Vector3f p, Vector3f direction) {
+	float dt = 0.005;
+
+	printf("direction: %f, %f, %f\n", direction.x, direction.y, direction.z);
+	ds = v*dt + direction*a*0.5*dt*dt;
+	printf("ds: %f, %f, %f\n", ds.x, ds.y, ds.z);
+	v += direction*a*dt;
+	printf("v: %f, %f, %f\n", v.x, v.y, v.z);
+
+	return p + ds;
+}
+Vector3f Move::CalRotate() {
+	float dx = ds.x;
+	float dy = ds.y;
+	float dz = ds.z;
+	rotation = Vector3f(-atan2(dy, dz), -atan2(dz, dx), atan2(dy, dx))*(180 / 3.14);
+	printf("rot : (%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
+	return rotation;
+}
+Vector3f Move::SearchRotate() {
+	rotateTime += 0.007;
+	return
+		Vector3f(rotation.x,
+			rotation.y + 45 * sinf(rotateTime),
+			rotation.z);
 }

@@ -36,12 +36,17 @@ private:
 
 	Road road;
 
+	Vector3f v;
+	Vector3f a;
+	Vector3f ds;
+	
+
 
 	Vector3f NormalPos(float time);
 	Vector3f NormalRotate(float time);
 
 	Vector3f SearchPos(float time);
-	Vector3f SearchRotate(float time);
+	
 	
 	Vector3f RandomPos(float time);
 	Vector3f RandomRotate(float time);
@@ -52,6 +57,8 @@ private:
 	Vector3f TestPos(float time);
 	Vector3f TestRotate(float time);
 
+	
+
 public:
 	Move(Vector3f init_pos, Vector3f init_rot) {
 		pos = init_pos;
@@ -61,42 +68,40 @@ public:
 		rotateTime = 0.0f;
 		escapeTime = 0.0f;
 		rand_target = Vector3f(0.0f, 0.0f, 0.0f);
+		v = Vector3f(3.0f, 3.0f, 3.0f);
+		a = Vector3f(0.8f, 0.8f, 0.8f);
+		ds = Vector3f(0.0f, 0.0f, 0.0f);
+		
+
+
 		arrive = true;
 		escape = false;
 		road = Road();
 	}
 
-	void setMode(int m) {
-		mode = m;
+	void setA(Vector3f aa) {
+		a = aa;
+	}
+	void setV(Vector3f vv) {
+		v = vv;
+	}
+	Vector3f getV() {
+		return v;
 	}
 
-	Vector3f getPos(float time) {
-		switch (mode) {
-			case 0:return NormalPos(time);
-			case 1:return SearchPos(time);
-			case 2:return RandomPos(time);
-			case 3:return EscapePos(time);
-			case 4:return TestPos(time);
-			default:printf("mode error\n");
-				break;
-
-		}
-
-		return pos;
+	void setRot(Vector3f rr) {
+		rotation = rr;
 	}
-
-	Vector3f getRotation(float time) {
-		switch (mode) {
-			case 0:return NormalRotate(time);
-			case 1:return SearchRotate(time);
-			case 2:return RandomRotate(time);
-			case 3:return EscapeRotate(time);
-			case 4:return TestRotate(time);
-			default:printf("mode error\n");
-				
-		}
-		return rotation;
+	
+	void reset() {
+		rotateTime = 0;
 	}
+	
+	Vector3f CalPos(Vector3f p, Vector3f direction);
+	Vector3f CalRotate();
 
+	Vector3f SearchRotate();
+
+	
 };
 
