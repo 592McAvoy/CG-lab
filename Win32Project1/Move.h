@@ -58,6 +58,7 @@ private:
 	Vector3f TestRotate(float time);
 
 	
+	
 
 public:
 	Move(Vector3f init_pos, Vector3f init_rot) {
@@ -80,7 +81,9 @@ public:
 	}
 
 	void setA(Vector3f aa) {
-		a = aa;
+		a.x = abs(aa.x) < 2 ? aa.x : 0.8*aa.x;
+		a.y = abs(aa.y) < 2 ? aa.y : 0.8*aa.y;
+		a.z = abs(aa.z) < 2 ? aa.z : 0.8*aa.z;
 	}
 	void setV(Vector3f vv) {
 		v = vv;
@@ -93,13 +96,14 @@ public:
 		rotation = rr;
 	}
 	
-	void reset() {
-		rotateTime = 0;
-	}
 	
 	Vector3f CalPos(Vector3f p, Vector3f direction);
 	Vector3f CalRotate();
 
+	Vector3f ConstantPos(Vector3f p, Vector3f tar);
+	Vector3f ConstantRotate();
+
+	Vector3f LimitPos(Vector3f p, Vector3f direction);
 	Vector3f SearchRotate();
 
 	

@@ -27,6 +27,7 @@ public:
 		m_pSkyBox = NULL;
 		
 		m_fkr = NULL;
+		m_antifkr = NULL;
 		m_house = NULL;
 
 		m_dirLight.AmbientIntensity = 0.3f;
@@ -47,6 +48,7 @@ public:
 		SAFE_DELETE(m_pGameCamera);        
 		SAFE_DELETE(m_pSkyBox);
 		SAFE_DELETE(m_fkr);
+		SAFE_DELETE(m_antifkr);
 		SAFE_DELETE(m_house);
 	}
 
@@ -61,11 +63,21 @@ public:
 
 		m_mode = 0;
 
-		m_fkr = new DynamicModel(m_pGameCamera, m_persProjInfo, m_dirLight);
-		if (!m_fkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
+		m_fkr = new FKRModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		m_fkr->setScale(0.08);
+		m_fkr->setEnemy(m_antifkr);
+		if (!m_fkr->Init("../Content/starship/Starship.obj", "../Content/starship/1.png")) {
 			return false;
 		}
+		
 
+		m_antifkr = new AntiFKRModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		m_antifkr->setScale(0.03);
+		m_antifkr->setTarget(m_fkr);
+		if (!m_antifkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
+			return false;
+		}
+		
 		/*m_house = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight);
 		if (!m_house->Init("../Content/blacksmith/blacksmiths.obj", "../Content/blacksmith/blacksmiths.jpg")) {
 			return false;
@@ -98,7 +110,9 @@ public:
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_fkr->Render(m_mode);
+		m_fkr->Render();
+
+		m_antifkr->Render();
 
 		//m_house->Render();
 
@@ -160,7 +174,8 @@ private:
 	SkyBox* m_pSkyBox;
 	PersProjInfo m_persProjInfo;
 	int m_mode;
-	DynamicModel* m_fkr;
+	FKRModel* m_fkr;
+	AntiFKRModel* m_antifkr;
 	StaticModel* m_house;
 
 };

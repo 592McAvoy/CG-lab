@@ -1,25 +1,42 @@
 #include "strategy.h"
 
+Vector3f genRandPos() {
+	return Vector3f(
+		0.01f*((rand() % 3 - 1)*rand() % 2500),
+		0.01f*((rand() % 3 - 1)*rand() % 1000),
+		0.01f*((rand() % 3 - 1)*rand() % 500));
+}
+
+void Strategy::init() {
+	mypos = genRandPos();
+	myrot = Vector3f(1.0, -1.0, 0.0);
+
+	target = EMPTY;
+	enemy = EMPTY;
+	protect = EMPTY;
+
+	temp = mypos;
+	time = 0.0;
+	mark = GetTickCount();
+	m_move = new Move(mypos, myrot);
+	m_move->setV(Vector3f(0.0, 0.0, 0.0));
+}
+
+void FKRStrategy::init() {
+	Strategy::init();
+	target = genRandPos();//人
+	enemy = genRandPos();//anti FKR
+	state = SEARCH;
+}
+
+void AntiFKRStrategy::init() {
+	Strategy::init();
+	target = genRandPos();//FKR
+	protect = genRandPos();//人
+	state = WAIT;
+}
+
 void Strategy::update() {
-	printf("\n");
-	printf("target %f %f %f\n", target.x, target.y, target.z);
-	printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);
-
-	//生成随机目标，以后被替换成真实目标
-	if (abs(target.x - mypos.x)<5&&abs(target.y - mypos.y)<5&&abs(target.z - mypos.z)<5) {
-		arrive = true;
-	}
-
-	if (arrive) {		
-		target = Vector3f(
-			0.01f*((rand() % 3 - 1)*rand() % 2500),
-			0.01f*((rand() % 3 - 1)*rand() % 1000),
-			0.01f*((rand() % 3 - 1)*rand() % 500));
-		arrive = false;
-		state = SEARCH;
-	}
-
-
 	time += 0.01;
 
 	switch (state) {
@@ -29,14 +46,23 @@ void Strategy::update() {
 	case SEARCH://目标不在攻击范围内-》搜索
 		search();
 		break;
-	case WAIT://悬停（保持小范围随机运动）
+	case WAIT://待命（保持小范围随机运动）
 		wait();
+		break;
+	case ESCAPE://躲避
+		escape();
+		break;
+	case GOBACK://回归
+		escape();
+		break;
+	case APPROACH://靠近
+		approach();
 		break;
 	default:
 		printf("oops!error\n");
 	}
 	
-
+	printf("\n");
 	
 }
 
@@ -45,26 +71,48 @@ void Strategy::chase() {
 	float xd = target.x > mypos.x ? 1.0 : -1.0;
 	float yd = target.y > mypos.y ? 1.0 : -1.0;
 	float zd = target.z > mypos.z ? 1.0 : -1.0;
-	//mydir = Vector3f(xd, yd, zd);
-	mydir = Vector3f(1.0, 1.0, 1.0);
+	mydir = Vector3f(xd, yd, zd);
 
-	m_move->setA(Vector3f(0.6,0.6,0.6)-(target-mypos)*0.5);
+	m_move->setA(abs(target-mypos)*0.5);
 	
 	mypos = m_move->CalPos(mypos, mydir);
 	myrot = m_move->CalRotate();
+
+	
+}
+
+void Strategy::approach() {
+	printf("approach\n");
+	float xd = target.x > mypos.x ? -1.0 : 1.0;
+	float yd = target.y > mypos.y ? -1.0 : 1.0;
+	float zd = target.z > mypos.z ? -1.0 : 1.0;
+	mydir = Vector3f(xd, yd, zd);
+
+	m_move->setA(abs(target - mypos)*0.5);
+
+	mypos = m_move->CalPos(mypos, mydir);
+	myrot = m_move->CalRotate();
+
+
+}
+
+void Strategy::goback() {
+	printf("goback\n");
+	float xd = protect.x > mypos.x ? 1.0 : -1.0;
+	float yd = protect.y > mypos.y ? 1.0 : -1.0;
+	float zd = protect.z > mypos.z ? 1.0 : -1.0;
+	mydir = Vector3f(xd, yd, zd);
+
+	m_move->setA(abs(protect - mypos)*0.5);
+
+	mypos = m_move->CalPos(mypos, mydir);
+	myrot = m_move->CalRotate();
+
+
 }
 
 void Strategy::search() {
 	printf("search\n");
-
-	if (abs(target.x - mypos.x)<10
-		&& abs(target.y - mypos.y)<7
-		&& abs(target.z - mypos.z)<7) {
-		m_move->reset();
-		//m_move->setV((target - mypos)*0.8);
-		m_move->setRot(myrot);
-		state = CHASE;
-	}
 
 	if (GetTickCount() - mark > 3500 && GetTickCount() - mark < 3505) {
 		mydir = mydir * -1;
@@ -81,14 +129,12 @@ void Strategy::search() {
 		yd += rr;
 		zd += rr;
 		mydir = Vector3f(xd, yd, zd);
-		//m_move->setV(2*mydir);
-
 		mark = GetTickCount();
 	}
 	
 	m_move->setA(Vector3f(0.7, 0.7, 0.7));
 
-	mypos = m_move->CalPos(mypos, mydir);
+	mypos = m_move->LimitPos(mypos, mydir);
 	myrot = m_move->CalRotate();
 	inScope();	
 }
@@ -96,20 +142,104 @@ void Strategy::search() {
 void Strategy::wait() {
 	printf("wait\n");
 
+	if (GetTickCount() - mark > 500 && GetTickCount() - mark < 505) {
+		mydir = mydir * -1;
+		m_move->setA(Vector3f(0.8, 0.8, 0.8));
+	}
+
+	//随机方向	
+	if (GetTickCount() - mark > 1000) {
+		temp = protect + Vector3f(
+			0.01f*((rand() % 3 - 1)*rand() % 300),
+			0.01f*((rand() % 3 - 1)*rand() % 300),
+			0.01f*((rand() % 3 - 1)*rand() % 200));
+		mark = GetTickCount();
+	}
+	
+
+	mypos = m_move->ConstantPos(mypos, temp);
+	inScope();
+
 }
 
 void Strategy::escape() {
 	printf("escape\n");
+	if (abs(enemy.x - mypos.x)>10 && abs(enemy.y - mypos.y)>7 && abs(enemy.z - mypos.z)>4) {
+		enemy = genRandPos();
+		state = SEARCH;
+		m_move->setV(Vector3f(0.0, 0.0, 0.0));
+		return;
+	}
+	
 
 	float xd = enemy.x > mypos.x ? -1.0 : 1.0;
 	float yd = enemy.y > mypos.y ? -1.0 : 1.0;
 	float zd = enemy.z > mypos.z ? -1.0 : 1.0;
-	//mydir = Vector3f(xd, yd, zd);
-	mydir = Vector3f(1.0, 1.0, 1.0);
-
-	m_move->setA((mypos - enemy));
+	mydir = Vector3f(xd, yd, zd);
+	
+	m_move->setA(reverse(mypos - enemy)*2);
 
 	mypos = m_move->CalPos(mypos, mydir);
 	myrot = m_move->CalRotate();
+
+
+}
+
+void FKRStrategy::update() {
+	printf("FKR\n");
+	printf("target %f %f %f\n", target.x, target.y, target.z);
+	printf("enemy %f %f %f\n", enemy.x, enemy.y, enemy.z);
+	printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);
+
+	//遇到敌人-escape
+	if (abs(enemy.x - mypos.x)<3 && abs(enemy.y - mypos.y)<3 && abs(enemy.z - mypos.z)<3) {
+		state = ESCAPE;
+	}
+	//目标离自己距离太远-search
+	else if (!(abs(target.x - mypos.x)<10
+		&& abs(target.y - mypos.y)<7
+		&& abs(target.z - mypos.z)<7)) {
+		state = SEARCH;
+	}
+	//离目标距离不远-approach
+	else if (abs(target.x - mypos.x) < 5 && abs(target.y - mypos.y) < 5 && abs(target.z - mypos.z) < 5) {
+		state = APPROACH;
+	}
+	//追逐目标
+	else {
+		state = CHASE;
+	}
+
+
+	Strategy::update();
+
+	printf("\n");
+
+}
+
+void AntiFKRStrategy::update() {
+	printf("AntiFKR\n");
+	printf("target %f %f %f\n", target.x, target.y, target.z);
+	printf("protect %f %f %f\n", protect.x, protect.y, protect.z);
+	printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);
+
+	//目标距离被保护对象太近-chase
+	if (abs(target.x - protect.x)<5 && abs(target.y - protect.y)<5 && abs(target.z - protect.z)<5) {
+		state = CHASE;
+	}
+	//在被保护对象周围待命
+	else if (abs(protect.x - mypos.x) < 5 && abs(protect.y - mypos.y) < 5 && abs(protect.z - mypos.z) < 5) {
+		m_move->setV(Vector3f(0.0, 0.0, 0.0));
+		state = WAIT;
+	}
+	//回到被保护对象周围
+	else {
+		state = GOBACK;
+	}
+
+
+	Strategy::update();
+
+	printf("\n");
 
 }
