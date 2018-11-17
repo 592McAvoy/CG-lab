@@ -36,6 +36,8 @@ bool StaticModel::Init(const string& modelPathName, const string& texturePathNam
 	m_pLightingTechnique->Enable();
 	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
 	m_pLightingTechnique->SetColorTextureUnit(0);
+	m_pLightingTechnique->SetMatSpecularIntensity(0.5f);
+	m_pLightingTechnique->SetMatSpecularPower(4);
 
 	m_pMesh = new Mesh();
 	if (!m_pMesh->LoadMesh(modelPathName, texturePathName)) {
@@ -59,6 +61,8 @@ void StaticModel::Render()
 
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
+	m_pLightingTechnique->SetEyeWorldPos(m_pCamera->GetPos());
+
 	m_pMesh->Render();
 
 

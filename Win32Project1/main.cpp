@@ -30,11 +30,12 @@ public:
 		m_antifkr = NULL;
 		m_house = NULL;
 		m_human = NULL;
+		m_house1 = NULL;
 
 		m_dirLight.AmbientIntensity = 0.3f;
 		m_dirLight.DiffuseIntensity = 0.8f;
 		m_dirLight.Color = Vector3f(1.0f, 1.0f, 1.0f);
-		m_dirLight.Direction = Vector3f(3.0f, -2.0f, 5.0f);
+		m_dirLight.Direction = Vector3f(-3.0f, -2.0f, 5.0f);
 
 		m_persProjInfo.FOV = 60.0f;
 		m_persProjInfo.Height = WINDOW_HEIGHT;
@@ -52,6 +53,7 @@ public:
 		SAFE_DELETE(m_antifkr);
 		SAFE_DELETE(m_house);
 		SAFE_DELETE(m_human);
+		SAFE_DELETE(m_house1);
 
 	}
 
@@ -60,9 +62,9 @@ public:
 	{
 		srand(time(0));
 
-		Vector3f Pos(3.0f, 0.0f, -10.0f);
-		Vector3f Target(0.5f, -1.2f, 1.0f);
-		Vector3f Up(2.0, 1.0f, 0.0f);
+		Vector3f Pos(0.0f, 1.0f, -15.0f);
+		Vector3f Target(0.0f, -1.0f, 1.0f);
+		Vector3f Up(0.0, 1.0f, 0.0f);
 
 		m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
 
@@ -85,15 +87,21 @@ public:
 		if (!m_antifkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
 			return false;
 		}
-		
-		/*m_house = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight);
-		if (!m_house->Init("../Content/blacksmith/blacksmiths.obj", "../Content/blacksmith/blacksmiths.jpg")) {
-			return false;
-		}*/
-
-		
+				
 		m_human->setScale(0.1);
 		if (!m_human->Init("../Content/human/hualishu.obj", "../Content/human/cloth_u.dds")) {
+			return false;
+		}
+
+		m_house = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		m_house->setInfo(0.03, Vector3f(-6.0, -6, 20), Vector3f(0, 40, 0));
+		if (!m_house->Init("../Content/h/h1.obj", "../Content/h/h1.jpg")) {
+			return false;
+		}
+
+		m_house1 = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		m_house1->setInfo(0.03, Vector3f(14, -6, 29), Vector3f(0, 165, 0));
+		if (!m_house1->Init("../Content/h/h2.obj", "../Content/h/h2.jpg")) {
 			return false;
 		}
 
@@ -128,9 +136,11 @@ public:
 
 		m_antifkr->Render();
 
-		//m_house->Render();
-
 		m_human->Render();
+
+		m_house->Render();
+
+		m_house1->Render();
 
 		m_pSkyBox->Render();
 
@@ -141,33 +151,25 @@ public:
 
 	void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE State)
 	{
-		/*switch (OgldevKey) {
+		switch (OgldevKey) {
 		case OGLDEV_KEY_ESCAPE:
 		case OGLDEV_KEY_q:
 			GLUTBackendLeaveMainLoop();
 			break;
-		case OGLDEV_KEY_0:
-			m_mode = 0;
+		case OGLDEV_KEY_a:
+			m_dirLight.AmbientIntensity += 0.05f;
 			break;
-		case OGLDEV_KEY_1:
-			m_mode = 1;
+		case OGLDEV_KEY_s:
+			m_dirLight.AmbientIntensity -= 0.05f;
 			break;
-		case OGLDEV_KEY_2:
-			m_mode = 2;
+		case OGLDEV_KEY_z:
+			m_dirLight.DiffuseIntensity += 0.05f;
 			break;
-		case OGLDEV_KEY_3:
-			m_mode = 3;
-			break;
-		case OGLDEV_KEY_4:
-			m_mode = 4;
-			break;
-		case OGLDEV_KEY_5:
-			m_mode = 5;
-			break;
+		case OGLDEV_KEY_x:
+			m_dirLight.DiffuseIntensity -= 0.05f;
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
-		}*/
-		m_pGameCamera->OnKeyboard(OgldevKey);
+		}
 	}
 
 	void MouseCB(OGLDEV_MOUSE OgldevMouse, OGLDEV_KEY_STATE OgldevKeyState, int x, int y) {
@@ -188,13 +190,16 @@ private:
 
 	Camera* m_pGameCamera;
 	DirectionalLight m_dirLight;   
-	SkyBox* m_pSkyBox;
 	PersProjInfo m_persProjInfo;
 	
 	FKRModel* m_fkr;
 	AntiFKRModel* m_antifkr;
-	StaticModel* m_house;
 	HumanModel* m_human;
+
+	StaticModel* m_house;
+	StaticModel* m_house1;
+
+	SkyBox* m_pSkyBox;
 
 };
 

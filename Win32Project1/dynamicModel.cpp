@@ -91,6 +91,7 @@ void AntiFKRModel::Render()
 
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
+	
 	m_pMesh->Render();
 }
 
