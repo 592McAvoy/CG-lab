@@ -4,7 +4,6 @@
 #include "ogldev_basic_lighting.h"
 #include "strategy.h"
 
-enum Role { FKR = 1, ANTIFKR };
 class DynamicModel
 {
 public:
@@ -45,8 +44,6 @@ public:
 	}
 	~FKRModel() {
 		SAFE_DELETE(m_strategy);
-		SAFE_DELETE(m_enemy);
-		SAFE_DELETE(m_target);
 	}
 
 	bool Init(const string& modlePathName, const string& texturePathName) {
@@ -86,8 +83,6 @@ public:
 	}
 	~AntiFKRModel() {
 		SAFE_DELETE(m_strategy);
-		SAFE_DELETE(m_protect);
-		SAFE_DELETE(m_target);
 	}
 	bool Init(const string& modlePathName, const string& texturePathName) {
 		if (!DynamicModel::Init(modlePathName, texturePathName))
@@ -114,4 +109,30 @@ private:
 		if (m_target)
 			m_strategy->setTarget(m_target->getPos());
 	}
+};
+
+class HumanModel :public DynamicModel
+{
+public:
+	HumanModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l) :
+		DynamicModel(pCamera, p, l)
+	{
+		m_strategy = new HumanStrategy();
+	}
+	~HumanModel() {
+		SAFE_DELETE(m_strategy);
+	}
+	bool Init(const string& modlePathName, const string& texturePathName) {
+		if (!DynamicModel::Init(modlePathName, texturePathName))
+			return false;
+		m_strategy->init();
+		return true;
+	}
+	
+	void Render();
+	
+
+private:
+	HumanStrategy* m_strategy;
+	
 };

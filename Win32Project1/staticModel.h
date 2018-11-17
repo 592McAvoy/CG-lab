@@ -28,7 +28,7 @@ private:
 	Mesh* m_pMesh;
 	PersProjInfo m_persProjInfo;
 
-	float scale = 0.01f;
+	float scale = 0.1f;
 	Vector3f positon = Vector3f(0.0f, -8.0f, 0.0f);
-	Vector3f rotation = Vector3f(0.0f, 0.0f, 0.0f);
+	Vector3f rotation = Vector3f(20.0f, 180.0f, 0.0f);
 };

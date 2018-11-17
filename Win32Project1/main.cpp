@@ -29,6 +29,7 @@ public:
 		m_fkr = NULL;
 		m_antifkr = NULL;
 		m_house = NULL;
+		m_human = NULL;
 
 		m_dirLight.AmbientIntensity = 0.3f;
 		m_dirLight.DiffuseIntensity = 0.8f;
@@ -50,30 +51,37 @@ public:
 		SAFE_DELETE(m_fkr);
 		SAFE_DELETE(m_antifkr);
 		SAFE_DELETE(m_house);
+		SAFE_DELETE(m_human);
+
 	}
 
 
 	bool Init()
 	{
-		Vector3f Pos(3.0f, 0.0f, -15.0f);
+		srand(time(0));
+
+		Vector3f Pos(3.0f, 0.0f, -10.0f);
 		Vector3f Target(0.5f, -1.2f, 1.0f);
 		Vector3f Up(2.0, 1.0f, 0.0f);
 
 		m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
 
-		m_mode = 0;
 
 		m_fkr = new FKRModel(m_pGameCamera, m_persProjInfo, m_dirLight);
-		m_fkr->setScale(0.08);
+		m_antifkr = new AntiFKRModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+		m_human = new HumanModel(m_pGameCamera, m_persProjInfo, m_dirLight);
+
+		m_fkr->setScale(0.06);
 		m_fkr->setEnemy(m_antifkr);
+		m_fkr->setTarget(m_human);
 		if (!m_fkr->Init("../Content/starship/Starship.obj", "../Content/starship/1.png")) {
 			return false;
 		}
 		
-
-		m_antifkr = new AntiFKRModel(m_pGameCamera, m_persProjInfo, m_dirLight);
-		m_antifkr->setScale(0.03);
+		
+		m_antifkr->setScale(0.01);
 		m_antifkr->setTarget(m_fkr);
+		m_antifkr->setProtect(m_human);
 		if (!m_antifkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
 			return false;
 		}
@@ -82,6 +90,12 @@ public:
 		if (!m_house->Init("../Content/blacksmith/blacksmiths.obj", "../Content/blacksmith/blacksmiths.jpg")) {
 			return false;
 		}*/
+
+		
+		m_human->setScale(0.1);
+		if (!m_human->Init("../Content/human/hualishu.obj", "../Content/human/cloth_u.dds")) {
+			return false;
+		}
 
 		m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
 		if (!m_pSkyBox->Init(".",
@@ -116,6 +130,8 @@ public:
 
 		//m_house->Render();
 
+		m_human->Render();
+
 		m_pSkyBox->Render();
 
 
@@ -125,7 +141,7 @@ public:
 
 	void KeyboardCB(OGLDEV_KEY OgldevKey, OGLDEV_KEY_STATE State)
 	{
-		switch (OgldevKey) {
+		/*switch (OgldevKey) {
 		case OGLDEV_KEY_ESCAPE:
 		case OGLDEV_KEY_q:
 			GLUTBackendLeaveMainLoop();
@@ -150,7 +166,8 @@ public:
 			break;
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
-		}
+		}*/
+		m_pGameCamera->OnKeyboard(OgldevKey);
 	}
 
 	void MouseCB(OGLDEV_MOUSE OgldevMouse, OGLDEV_KEY_STATE OgldevKeyState, int x, int y) {
@@ -173,10 +190,11 @@ private:
 	DirectionalLight m_dirLight;   
 	SkyBox* m_pSkyBox;
 	PersProjInfo m_persProjInfo;
-	int m_mode;
+	
 	FKRModel* m_fkr;
 	AntiFKRModel* m_antifkr;
 	StaticModel* m_house;
+	HumanModel* m_human;
 
 };
 
