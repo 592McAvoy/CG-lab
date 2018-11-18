@@ -11,21 +11,12 @@ Vector3f Move::CalPos(Vector3f p, Vector3f direction) {
 	v += direction*a*dt;
 	return p + ds;
 }
-/*Vector3f Move::CalRotate() {
-	float dx = ds.x;
-	float dy = ds.y;
-	float dz = ds.z;
-	//rotation = Vector3f(-atan2(dy, dz), -atan2(dz, dx), atan2(dy, dx))*(180 / 3.14);
-	rotation = Vector3f(0, -atan2(dz, dx), 0)*(180 / 3.14);
-	//printf("rot : (%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
-	return rotation;
-}*/
 
 Vector3f Move::CalRotate() {
 	float rx = norm(atan2(v.z, -v.y) - atan2(prev_v.z, -prev_v.y));
 	float ry = norm(atan2(v.z, v.x) - atan2(prev_v.z, prev_v.x));
 	float rz = norm(atan2(-v.y, v.x) - atan2(-prev_v.y, prev_v.x));
-	//rotation = Vector3f(-atan2(dy, dz), -atan2(dz, dx), atan2(dy, dx))*(180 / 3.14);
+	
 	rotation += Vector3f(0, ry, 0)*(180 / PI);
 	//printf("rot : (%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
 	return rotation;

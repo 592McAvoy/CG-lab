@@ -37,7 +37,6 @@ bool DynamicModel::Init(const string& modelPathName, const string& texturePathNa
 	}
 
 	m_pLightingTechnique->Enable();
-	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
 	m_pLightingTechnique->SetColorTextureUnit(0);
 	
 	m_pMesh = new Mesh();
@@ -69,6 +68,7 @@ void FKRModel::Render()
 	p.SetCamera(m_pCamera->GetPos(), m_pCamera->GetTarget(), m_pCamera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
+	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
 	m_pMesh->Render();
@@ -89,6 +89,7 @@ void AntiFKRModel::Render()
 	p.SetCamera(m_pCamera->GetPos(), m_pCamera->GetTarget(), m_pCamera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
+	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
 	
@@ -110,6 +111,7 @@ void HumanModel::Render()
 	p.SetCamera(m_pCamera->GetPos(), m_pCamera->GetTarget(), m_pCamera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
+	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
 	m_pMesh->Render();

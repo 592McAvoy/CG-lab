@@ -157,16 +157,16 @@ public:
 			GLUTBackendLeaveMainLoop();
 			break;
 		case OGLDEV_KEY_a:
-			m_dirLight.AmbientIntensity += 0.05f;
+			changeAmbLight(0.05f);
 			break;
 		case OGLDEV_KEY_s:
-			m_dirLight.AmbientIntensity -= 0.05f;
+			changeAmbLight(-0.05f);
 			break;
 		case OGLDEV_KEY_z:
-			m_dirLight.DiffuseIntensity += 0.05f;
+			changeDiffLight(0.05f);
 			break;
 		case OGLDEV_KEY_x:
-			m_dirLight.DiffuseIntensity -= 0.05f;
+			changeDiffLight(-0.05f);
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
 		}
@@ -200,6 +200,21 @@ private:
 	StaticModel* m_house1;
 
 	SkyBox* m_pSkyBox;
+
+	void changeAmbLight(float ff) {
+		m_fkr->changeAmbLight(ff);
+		m_antifkr->changeAmbLight(ff);
+		m_human->changeAmbLight(ff);
+		m_house->changeAmbLight(ff);
+		m_house1->changeAmbLight(ff);
+	}
+	void changeDiffLight(float ff) {
+		m_fkr->changeDiffLight(ff);
+		m_antifkr->changeDiffLight(ff);
+		m_human->changeDiffLight(ff);
+		m_house->changeDiffLight(ff);
+		m_house1->changeDiffLight(ff);
+	}
 
 };
 

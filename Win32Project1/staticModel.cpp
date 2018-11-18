@@ -33,8 +33,7 @@ bool StaticModel::Init(const string& modelPathName, const string& texturePathNam
 		return false;
 	}
 
-	m_pLightingTechnique->Enable();
-	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
+	m_pLightingTechnique->Enable();	
 	m_pLightingTechnique->SetColorTextureUnit(0);
 	m_pLightingTechnique->SetMatSpecularIntensity(0.5f);
 	m_pLightingTechnique->SetMatSpecularPower(4);
@@ -59,7 +58,8 @@ void StaticModel::Render()
 	p.SetCamera(m_pCamera->GetPos(), m_pCamera->GetTarget(), m_pCamera->GetUp());
 	p.SetPerspectiveProj(m_persProjInfo);
 
-	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
+	m_pLightingTechnique->SetDirectionalLight(m_dirLight);
+	m_pLightingTechnique->SetWVP(p.GetWVPTrans());	
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
 	m_pLightingTechnique->SetEyeWorldPos(m_pCamera->GetPos());
 

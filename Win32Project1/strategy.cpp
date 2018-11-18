@@ -87,7 +87,6 @@ void Strategy::chase() {
 	checkBoundry();
 	mypos = m_move->CalPos(mypos, mydir);
 	myrot = m_move->CalRotate();
-
 	
 }
 

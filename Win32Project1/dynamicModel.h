@@ -22,6 +22,13 @@ public:
 	void setScale(float ss) {
 		m_scale = ss;
 	}
+
+	void changeAmbLight(float ff) {
+		m_dirLight.AmbientIntensity += ff;
+	}
+	void changeDiffLight(float ff) {
+		m_dirLight.DiffuseIntensity += ff;
+	}
 	
 
 protected:

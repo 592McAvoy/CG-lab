@@ -21,6 +21,13 @@ public:
 		rotation = rot;
 	}
 
+	void changeAmbLight(float ff) {
+		m_dirLight.AmbientIntensity += ff;
+	}
+	void changeDiffLight(float ff) {
+		m_dirLight.DiffuseIntensity += ff;
+	}
+
 private:
 	BasicLightingTechnique* m_pLightingTechnique;
 	const Camera* m_pCamera;

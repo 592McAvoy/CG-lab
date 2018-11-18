@@ -33,11 +33,11 @@ bool SkyboxTechnique::Init()
         return false;
     }
 
-    if (!AddShader(GL_VERTEX_SHADER, "skybox.vs")) {
+    if (!AddShader(GL_VERTEX_SHADER, "shaderFile/skybox.vs")) {
         return false;
     }
 
-    if (!AddShader(GL_FRAGMENT_SHADER, "skybox.fs")) {
+    if (!AddShader(GL_FRAGMENT_SHADER, "shaderFile/skybox.fs")) {
         return false;
     }
 
