@@ -2,17 +2,18 @@
 
 #include "ogldev_camera.h"
 #include "mesh.h"
-#include "ogldev_basic_lighting.h"
+//#include "ogldev_basic_lighting.h"
+#include "lighting_technique.h"
 
 class StaticModel
 {
 public:
-	StaticModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l);
+	StaticModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s);
 
 	~StaticModel();
 
 	bool Init(const string& modlePathName, const string& texturePathName);
-	
+	void ShadowRender();
 	void Render();
 
 	void setInfo(float s, Vector3f &pos, Vector3f &rot) {
@@ -29,9 +30,12 @@ public:
 	}
 
 private:
-	BasicLightingTechnique* m_pLightingTechnique;
+	LightingTechnique* m_pLightingTechnique;
+	ShadowMapTechnique* m_pShadowMapEffect;
+	
 	const Camera* m_pCamera;
 	DirectionalLight m_dirLight;
+	SpotLight m_spotLight;
 	Mesh* m_pMesh;
 	PersProjInfo m_persProjInfo;
 

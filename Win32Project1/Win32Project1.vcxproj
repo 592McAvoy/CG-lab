@@ -153,6 +153,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="shaderFile\shadow_map.fs" />
+    <None Include="shaderFile\shadow_map.vs" />
+    <None Include="shaderFile\shadow_volume.fs" />
+    <None Include="shaderFile\shadow_volume.gs" />
+    <None Include="shaderFile\shadow_volume.vs" />
     <None Include="skybox.fs" />
     <None Include="skybox.vs" />
   </ItemGroup>
@@ -162,9 +167,10 @@
     <ClCompile Include="glut_backend.cpp" />
     <ClCompile Include="io_buffer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="dynamicModel.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="null_technique.cpp" />
     <ClCompile Include="ogldev_app.cpp" />
     <ClCompile Include="ogldev_atb.cpp" />
     <ClCompile Include="ogldev_backend.cpp" />
@@ -182,15 +188,17 @@
     <ClCompile Include="ogldev_win32_control.cpp" />
     <ClCompile Include="ogldev_xcb_control.cpp" />
     <ClCompile Include="random_texture.cpp" />
+    <ClCompile Include="shadow_volume_technique.cpp" />
     <ClCompile Include="skybox.cpp" />
     <ClCompile Include="skybox_technique.cpp" />
     <ClCompile Include="staticModel.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="strategy.cpp" />
     <ClCompile Include="technique.cpp" />
+    <ClCompile Include="test\lighting_technique.cpp" />
+    <ClCompile Include="test\shadow_map_technique.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mesh.h" />
     <ClInclude Include="dynamicModel.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="road.h" />

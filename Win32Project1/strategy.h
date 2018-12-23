@@ -35,26 +35,26 @@ protected:
 	Move* m_move;
 
 	void inScope() {
-		mypos.x = mypos.x < -25 ? -25 : mypos.x;
-		mypos.x = mypos.x > 25 ? 25 : mypos.x;
-		mypos.y = mypos.y < -4 ? -4 : mypos.y;
-		mypos.y = mypos.y > 6 ? 6 : mypos.y;
-		mypos.z = mypos.z < -8 ? -8 : mypos.z;
+		mypos.x = mypos.x < -20 ? -20 : mypos.x;
+		mypos.x = mypos.x > 20 ? 20 : mypos.x;
+		mypos.y = mypos.y < 0 ? 0 : mypos.y;
+		mypos.y = mypos.y > 16 ? 16 : mypos.y;
+		mypos.z = mypos.z < -10 ? -10 : mypos.z;
 		mypos.z = mypos.z > 8 ? 8 : mypos.z;
 			
 	}	
 	void checkBoundry() {
 		Vector3f vtmp = m_move->getV();
 		Vector3f dtmp = mydir;
-		if (abs(mypos.x) == 25) {
+		if (abs(mypos.x) == 20) {
 			vtmp.x = 0;
 			dtmp.x = mypos.x > 0 ? -1 : 1;
 		}
-		if (mypos.y == -4 || mypos.y == 6) {
+		if (mypos.y == 0 || mypos.y == 16) {
 			vtmp.y = 0;
 			dtmp.y = mypos.y > 0 ? -1 : 1;
 		}
-		if (mypos.z == -8 || mypos.z == 8) {
+		if (mypos.z == -10 || mypos.z == 8) {
 			vtmp.z = 0;
 			dtmp.z = mypos.z > 0 ? -1 : 1;
 		}
@@ -120,7 +120,7 @@ private:
 	void inScope() {
 		mypos.x = mypos.x < -10 ? -10 : mypos.x;
 		mypos.x = mypos.x > 10 ? 10 : mypos.x;
-		mypos.z = mypos.z < -8 ? -8 : mypos.z;
+		mypos.z = mypos.z < -5 ? -5 : mypos.z;
 		mypos.z = mypos.z > 8 ? 8 : mypos.z;
 	}
 	void checkBoundry() {
@@ -130,7 +130,7 @@ private:
 			vtmp.x = 0;
 			dtmp.x = mypos.x > 0 ? -1 : 1;
 		}
-		if (mypos.z == -8 || mypos.z == 8) {
+		if (mypos.z == -5 || mypos.z == 8) {
 			vtmp.z = 0;
 			dtmp.z = mypos.z > 0 ? -1 : 1;
 		}

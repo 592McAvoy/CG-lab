@@ -22,11 +22,23 @@
     <None Include="skybox.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaderFile\shadow_volume.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaderFile\shadow_volume.gs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaderFile\shadow_volume.vs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaderFile\shadow_map.fs">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaderFile\shadow_map.vs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Move.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -54,9 +66,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="glut_backend.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ogldev_atb.cpp">
@@ -141,6 +150,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="strategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="shadow_volume_technique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="null_technique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\lighting_technique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="test\shadow_map_technique.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

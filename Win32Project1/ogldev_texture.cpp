@@ -23,6 +23,7 @@ Texture::Texture(GLenum TextureTarget, const std::string& FileName)
 {
     m_textureTarget = TextureTarget;
     m_fileName      = FileName;
+	//m_image = Magick::Image(m_fileName);
 }
 
 

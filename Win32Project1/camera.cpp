@@ -88,6 +88,8 @@ void Camera::Init()
     m_mousePos.x  = m_windowWidth / 2;
     m_mousePos.y  = m_windowHeight / 2;
 
+	m_focusPos = Vector3f(0, 2, 0);
+	
    // glutWarpPointer(m_mousePos.x, m_mousePos.y);
 }
 
@@ -167,6 +169,27 @@ Vector3f& Camera::GetClickPos(int x, int y) {
 	View.Rotate(aY, Haxis);
 
 	return View;
+}
+
+const int modelLimitX = 15;
+const int modelLimitY = 6;
+const int modelLimitZ = 8;
+const int modelMargin = 1;
+void Camera::Move(Vector3f pos)
+{
+	const float DeltaX = pos.x - m_focusPos.x;
+	const float DeltaY = pos.y - m_focusPos.y;
+	const float DeltaZ = pos.z - m_focusPos.z;
+
+	m_focusPos = pos;
+
+	m_AngleH += (float)DeltaX * 3.0f;
+	m_AngleV += (float)DeltaY * 3.0f;
+	//m_pos += m_target * STEP_SCALE;
+	//printf("angelH %f\tangleV %f\n", m_AngleH, m_AngleH);
+
+	
+	Update();
 }
 
 void Camera::OnMouse(int x, int y)
@@ -251,12 +274,13 @@ void Camera::Update()
     Vector3f View(1.0f, 0.0f, 0.0f);
     View.Rotate(m_AngleH, Vaxis);
     View.Normalize();
-
+	
     // Rotate the view vector by the vertical angle around the horizontal axis
     Vector3f Haxis = Vaxis.Cross(View);
     Haxis.Normalize();
     View.Rotate(m_AngleV, Haxis);
-       
+
+	
     m_target = View;
     m_target.Normalize();
 

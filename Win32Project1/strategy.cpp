@@ -27,7 +27,7 @@ void HumanStrategy::init() {
 	Strategy::init();
 	mypos = Vector3f(
 		0.01f*((rand() % 3 - 1)*rand() % 500),
-		-5,
+		-6,
 		0.01f*((rand() % 3 - 1)*rand() % 200));
 	
 }

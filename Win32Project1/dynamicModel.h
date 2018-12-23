@@ -1,13 +1,14 @@
 #pragma once
 #include "ogldev_camera.h"
 #include "mesh.h"
-#include "ogldev_basic_lighting.h"
+//#include "ogldev_basic_lighting.h"
+#include "lighting_technique.h"
 #include "strategy.h"
 
 class DynamicModel
 {
 public:
-	DynamicModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l);
+	DynamicModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s);
 
 	~DynamicModel();
 
@@ -15,10 +16,19 @@ public:
 
 	void Render();
 
+	void ShadowRender();
+
 	Vector3f getPos() {
 		return m_pos;
 	}
 
+	Vector3f getPrevPos() {
+		return m_prevpos;
+	}
+
+	Vector3f getRot() {
+		return m_rot;
+	}
 	void setScale(float ss) {
 		m_scale = ss;
 	}
@@ -32,20 +42,27 @@ public:
 	
 
 protected:
-	BasicLightingTechnique* m_pLightingTechnique;
-	const Camera* m_pCamera;
+	LightingTechnique *m_pLightingTechnique;
+	ShadowMapTechnique* m_pShadowMapEffect;
+	//BasicLightingTechnique* m_pLightingTechnique;
+	
 	DirectionalLight m_dirLight;
+	SpotLight m_spotLight;
+
+	const Camera* m_pCamera;
 	Mesh* m_pMesh;
 	PersProjInfo m_persProjInfo;
 	float m_scale = 0.02;
 	Vector3f m_pos;
+	Vector3f m_prevpos = Vector3f(0.0, 0.0, 0.0);
+	Vector3f m_rot;
 };
 
 class FKRModel :public DynamicModel
 {
 public:
-	FKRModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l):
-		DynamicModel(pCamera, p, l)
+	FKRModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s):
+		DynamicModel(pCamera, p, l, s)
 	{		
 		m_strategy = new FKRStrategy();
 	}
@@ -83,8 +100,8 @@ private:
 class AntiFKRModel :public DynamicModel
 {
 public:
-	AntiFKRModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l):
-		DynamicModel(pCamera, p, l)
+	AntiFKRModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s):
+		DynamicModel(pCamera, p, l,s)
 	{		
 		m_strategy = new AntiFKRStrategy();
 	}
@@ -121,8 +138,8 @@ private:
 class HumanModel :public DynamicModel
 {
 public:
-	HumanModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l) :
-		DynamicModel(pCamera, p, l)
+	HumanModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s) :
+		DynamicModel(pCamera, p, l,s)
 	{
 		m_strategy = new HumanStrategy();
 	}
