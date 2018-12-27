@@ -16,6 +16,7 @@
 #include "skybox.h"
 #include "dynamicModel.h"
 #include "staticModel.h"
+#include "Script.h"
 
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
@@ -31,12 +32,11 @@ public:
 	
 		m_pSkyBox = NULL;
 		
-		m_fkr = NULL;
-		m_antifkr = NULL;
 		m_house = NULL;
-		m_human = NULL;
 		m_house1 = NULL;
 		m_pQuad = NULL;
+
+		m_script = NULL;
 
 		m_spotLight.AmbientIntensity = 0.1f;
 		m_spotLight.DiffuseIntensity = 0.9f;
@@ -64,11 +64,10 @@ public:
 		
 		SAFE_DELETE(m_pGameCamera);        
 		SAFE_DELETE(m_pSkyBox);
-		SAFE_DELETE(m_fkr);
-		SAFE_DELETE(m_antifkr);
-		SAFE_DELETE(m_house);
-		SAFE_DELETE(m_human);
+		
 		SAFE_DELETE(m_house1);
+		SAFE_DELETE(m_house);
+		SAFE_DELETE(m_script);
 
 	}
 
@@ -83,36 +82,36 @@ public:
 
 		
 
-		Vector3f Pos(0.0f, 10.0f, -22.0f);
-		Vector3f Target(0.0f, -1.0f, 1.0f);
+		Vector3f Pos(0.0f, 10.0f, -20.0f);
+		Vector3f Target(0.0f, -7.0f, 20.0f);
 		Vector3f Up(0.0, 1.0f, 0.0f);
 
 		m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
 
+		m_script = new Script(STORY);
+		if (!m_script->Init(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight)) {
+			return false;
+		}
 
-		m_fkr = new FKRModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
-		m_antifkr = new AntiFKRModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
-		m_human = new HumanModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
-
-		m_fkr->setScale(0.1);
-		m_fkr->setEnemy(m_antifkr);
-		m_fkr->setTarget(m_human);
-		if (!m_fkr->Init("../Content/starship/Starship.obj", "../Content/starship/1.png")) {
+		m_cloud = new CloudModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
+		m_cloud->setInfo(0.4, Vector3f(0.0, 10, -5), Vector3f(0, 150, 0));
+		m_cloud->setChangeScale(0.0002);
+		if (!m_cloud->Init("../Content/cloud/file.obj", "../Content/white.png")) {
+			return false;
+		}
+		m_cloud0 = new CloudModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
+		m_cloud0->setInfo(2.0, Vector3f(-15.0, 8, 12), Vector3f(0, 0, 0));
+		m_cloud0->setChangeScale(0.00001);
+		if (!m_cloud0->Init("../Content/cloud/file.obj", "../Content/white.png")) {
+			return false;
+		}
+		m_cloud1= new CloudModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
+		m_cloud1->setInfo(1.15, Vector3f(10.0, 5, 4), Vector3f(0, -20, 0));
+		m_cloud1->setChangeScale(0.00003);
+		if (!m_cloud1->Init("../Content/cloud/file.obj", "../Content/white.png")) {
 			return false;
 		}
 		
-		
-		m_antifkr->setScale(0.02);
-		m_antifkr->setTarget(m_fkr);
-		m_antifkr->setProtect(m_human);
-		if (!m_antifkr->Init("../Content/BomberDrone/BomberDrone.obj", "../Content/BomberDrone/drone_d.tga")) {
-			return false;
-		}
-				
-		m_human->setScale(1);
-		if (!m_human->Init("../Content/pig/pig.obj", "../Content/pig/TexturePig.png")) {
-			return false;
-		}
 
 		m_house = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
 		m_house->setInfo(0.05, Vector3f(-7.0, -6, 17), Vector3f(0, 40, 0));
@@ -128,18 +127,18 @@ public:
 
 		m_pQuad = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
 		m_pQuad->setInfo(25.0f, Vector3f(0.0f, -6, 5), Vector3f(90.0f, 75.0f, 0.0f));
-		if (!m_pQuad->Init("../Content/quad.obj", "../Content/grass.jpg")) {
+		if (!m_pQuad->Init("../Content/quad.obj", "../Content/grass1.jpg")) {
 			return false;
 		}
 
 		/*m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
 		if (!m_pSkyBox->Init(".",
-			"../Content/nanji/nanji_L.jpg",
-			"../Content/nanji/nanji_R.jpg",
-			"../Content/nanji/nanji_U.jpg",
-			"../Content/nanji/nanji_D.jpg",
-			"../Content/nanji/nanji_F.jpg",
-			"../Content/nanji/nanji_B.jpg")) {
+			"../Content/1.jpg",
+			"../Content/1.jpg",
+			"../Content/1.jpg",
+			"../Content/1.jpg",
+			"../Content/1.jpg",
+			"../Content/1.jpg")) {
 			return false;
 		}*/
 
@@ -159,6 +158,8 @@ public:
 		
 		ShadowMapPass();
 		RenderPass();
+
+		//m_pSkyBox->Render();
 		
 		glutSwapBuffers();
 	}
@@ -169,15 +170,16 @@ public:
 
 		glClear(GL_DEPTH_BUFFER_BIT);
 		
-		m_fkr->ShadowRender();
-
-		m_antifkr->ShadowRender();
+		m_script->ShadowRender();
 
 		m_house->ShadowRender();
-
 		m_house1->ShadowRender();
 
-		m_human->ShadowRender();
+		m_cloud->ShadowRender();
+		m_cloud0->ShadowRender();
+		m_cloud1->ShadowRender();
+
+		
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
@@ -188,24 +190,19 @@ public:
 		
 		m_shadowMapFBO.BindForReading(GL_TEXTURE1);
 
-		m_fkr->Render();
-
-		m_antifkr->Render();
+		
+		m_script->Render();
 
 		m_house->Render();
-
 		m_house1->Render();
-
-		m_human->Render();
-
 		
-		m_pQuad->Render();
 
-		//m_pSkyBox->Render();
+		m_cloud->Render();
+		m_cloud0->Render();
+		m_cloud1->Render();
 
-		Vector3f pos = m_fkr->getPos();
-		//printf("Pos(%f,%f,%f)\n", pos.x, pos.y, pos.z);
-		m_pGameCamera->Move(pos);
+		m_pQuad->Render();	
+
 	}
 
 
@@ -254,27 +251,33 @@ private:
 	Camera* m_pGameCamera;  
 	PersProjInfo m_persProjInfo;
 	
-	FKRModel* m_fkr;
+	/*FKRModel* m_fkr;
 	AntiFKRModel* m_antifkr;
-	HumanModel* m_human;
+	HumanModel* m_human;*/
 
 	StaticModel* m_house;
 	StaticModel* m_house1;
 	StaticModel* m_pQuad;
 
+	CloudModel* m_cloud;
+	CloudModel* m_cloud0;
+	CloudModel* m_cloud1;
+
 	SkyBox* m_pSkyBox;
 
+	Script* m_script;
+
 	void changeAmbLight(float ff) {
-		m_fkr->changeAmbLight(ff);
+		/*m_fkr->changeAmbLight(ff);
 		m_antifkr->changeAmbLight(ff);
-		m_human->changeAmbLight(ff);
+		m_human->changeAmbLight(ff);*/
 		m_house->changeAmbLight(ff);
 		m_house1->changeAmbLight(ff);
 	}
 	void changeDiffLight(float ff) {
-		m_fkr->changeDiffLight(ff);
+		/*m_fkr->changeDiffLight(ff);
 		m_antifkr->changeDiffLight(ff);
-		m_human->changeDiffLight(ff);
+		m_human->changeDiffLight(ff);*/
 		m_house->changeDiffLight(ff);
 		m_house1->changeDiffLight(ff);
 	}

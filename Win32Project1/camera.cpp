@@ -88,7 +88,7 @@ void Camera::Init()
     m_mousePos.x  = m_windowWidth / 2;
     m_mousePos.y  = m_windowHeight / 2;
 
-	m_focusPos = Vector3f(0, 2, 0);
+	m_focusPos = Vector3f(0, 0, 0);
 	
    // glutWarpPointer(m_mousePos.x, m_mousePos.y);
 }
@@ -184,7 +184,7 @@ void Camera::Move(Vector3f pos)
 	m_focusPos = pos;
 
 	m_AngleH += (float)DeltaX * 3.0f;
-	m_AngleV += (float)DeltaY * 3.0f;
+	m_AngleV += (float)DeltaY * 0.3f;
 	//m_pos += m_target * STEP_SCALE;
 	//printf("angelH %f\tangleV %f\n", m_AngleH, m_AngleH);
 

@@ -29,7 +29,7 @@ public:
 		m_dirLight.DiffuseIntensity += ff;
 	}
 
-private:
+protected:
 	LightingTechnique* m_pLightingTechnique;
 	ShadowMapTechnique* m_pShadowMapEffect;
 	
@@ -42,4 +42,21 @@ private:
 	float scale = 0.01f;
 	Vector3f positon = Vector3f(0.0f, -8.0f, 0.0f);
 	Vector3f rotation = Vector3f(20.0f, 180.0f, 0.0f);
+};
+
+class CloudModel :public StaticModel
+{
+public:
+	CloudModel(const Camera* pCamera, const PersProjInfo& p, const DirectionalLight& l, const SpotLight& s)
+		:StaticModel(pCamera,p,l,s){
+		m_scale = 0.0f;
+	}
+
+	~CloudModel(){}
+	void ShadowRender();
+	void Render();
+	void setChangeScale(float c) { m_change = c; }
+private:
+	float m_scale;
+	float m_change;
 };

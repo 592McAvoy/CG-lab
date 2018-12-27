@@ -21,11 +21,7 @@ public:
 	Vector3f getPos() {
 		return m_pos;
 	}
-
-	Vector3f getPrevPos() {
-		return m_prevpos;
-	}
-
+	
 	Vector3f getRot() {
 		return m_rot;
 	}
@@ -54,7 +50,6 @@ protected:
 	PersProjInfo m_persProjInfo;
 	float m_scale = 0.02;
 	Vector3f m_pos;
-	Vector3f m_prevpos = Vector3f(0.0, 0.0, 0.0);
 	Vector3f m_rot;
 };
 
@@ -65,6 +60,9 @@ public:
 		DynamicModel(pCamera, p, l, s)
 	{		
 		m_strategy = new FKRStrategy();
+		m_enemy = NULL;
+		m_enemy0 = NULL;
+		m_target = NULL;
 	}
 	~FKRModel() {
 		SAFE_DELETE(m_strategy);
@@ -81,17 +79,29 @@ public:
 		m_target = target;
 	}
 	void setEnemy(DynamicModel* enemy) {
-		m_enemy = enemy;
+		if (!m_enemy)
+			m_enemy = enemy;
+		else
+			m_enemy0 = enemy;
+	}
+	void setInitPos(Vector3f init) {
+		m_strategy->setPos(init);
 	}
 	
 private:
 	FKRStrategy* m_strategy;
 	DynamicModel* m_enemy;
+	DynamicModel* m_enemy0;
 	DynamicModel* m_target;
 
 	void updateInfo() {
-		if (m_enemy)
+		if (m_enemy0)
+			m_strategy->setEnemy(m_enemy->getPos(), m_enemy0->getPos());
+		else if(m_enemy)
+		{
 			m_strategy->setEnemy(m_enemy->getPos());
+		}
+
 		if (m_target)
 			m_strategy->setTarget(m_target->getPos());
 	}
@@ -121,7 +131,12 @@ public:
 	void setProtect(DynamicModel* protect) {
 		m_protect = protect;
 	}
-
+	void setInitPos(Vector3f init) {
+		m_strategy->setPos(init);
+	}
+	void likeHome() {
+		m_strategy->likeHome();
+	}
 private:
 	AntiFKRStrategy* m_strategy;
 	DynamicModel* m_protect;
@@ -154,9 +169,21 @@ public:
 	}
 	
 	void Render();
+	void setEnemy(DynamicModel* enemy) {		
+		m_enemy = enemy;		
+	}
+	void setInitPos(Vector3f init) {
+		m_strategy->setPos(init);
+	}
 	
 
 private:
 	HumanStrategy* m_strategy;
+	DynamicModel* m_enemy;//FKR
+
+	void updateInfo() {
+		if (m_enemy)
+			m_strategy->setEnemy(m_enemy->getPos());
+	}
 	
 };

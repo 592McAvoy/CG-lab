@@ -91,15 +91,7 @@ void FKRModel::Render()
 	updateInfo();//更新与本模型有交互的模型的位置信息
 	m_strategy->update();
 	m_rot = m_strategy->getRot();
-
-	if (m_prevpos != Vector3f(0.0, 0.0, 0.0)) {
-		m_prevpos = m_pos;
-		m_pos = m_strategy->getPos();
-	}
-	else {
-		m_pos = m_strategy->getPos();
-		m_prevpos = m_pos;
-	}
+	m_pos = m_strategy->getPos();
 	
 
 	Pipeline p;
@@ -127,15 +119,8 @@ void AntiFKRModel::Render()
 	updateInfo();//更新与本模型有交互的模型的位置信息
 	m_strategy->update();
 	m_rot = m_strategy->getRot();
-
-	if (m_prevpos != Vector3f(0.0, 0.0, 0.0)) {
-		m_prevpos = m_pos;
-		m_pos = m_strategy->getPos();
-	}
-	else {
-		m_pos = m_strategy->getPos();
-		m_prevpos = m_pos;
-	}
+	m_pos = m_strategy->getPos();
+	
 
 	Pipeline p;
 	p.Scale(m_scale, m_scale, m_scale);
@@ -159,17 +144,10 @@ void HumanModel::Render()
 	m_pLightingTechnique->Enable();
 	m_pLightingTechnique->SetEyeWorldPos(m_pCamera->GetPos());
 	
+	updateInfo();
 	m_strategy->update();
-	m_rot = m_strategy->getRot();
-	
-	if (m_prevpos != Vector3f(0.0, 0.0, 0.0)) {
-		m_prevpos = m_pos;
-		m_pos = m_strategy->getPos();
-	}
-	else {
-		m_pos = m_strategy->getPos();
-		m_prevpos = m_pos;
-	}
+	m_rot = m_strategy->getRot();	
+	m_pos = m_strategy->getPos();
 
 	Pipeline p;
 	p.Scale(m_scale, m_scale, m_scale);

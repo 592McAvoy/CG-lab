@@ -2,6 +2,7 @@
 
 #include "ogldev_pipeline.h"
 #include "ogldev_util.h"
+#include <math.h>
 
 StaticModel::StaticModel(const Camera* pCamera,
 	const PersProjInfo& p,
@@ -92,6 +93,51 @@ void StaticModel::Render()
 	m_pLightingTechnique->SetWVP(p.GetWVPTrans());	
 	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
 	
+
+	p.SetCamera(m_spotLight.Position, m_spotLight.Direction, Vector3f(0.0f, 1.0f, 0.0f));
+	m_pLightingTechnique->SetLightWVP(p.GetWVPTrans());
+
+
+	m_pMesh->Render();
+
+
+}
+
+
+void CloudModel::ShadowRender()
+{
+	m_scale += m_change;
+	m_pShadowMapEffect->Enable();
+
+	Pipeline p;
+	p.Scale(scale, scale, scale);
+	p.WorldPos(positon.x + sinf(m_scale)*10 , positon.y + sinf(m_scale)*5, positon.z + sinf(0.01*m_scale)*10);
+	p.Rotate(rotation.x, rotation.y+m_scale, rotation.z);
+
+	p.SetCamera(m_spotLight.Position, m_spotLight.Direction, Vector3f(0.0f, 1.0f, 0.0f));
+	p.SetPerspectiveProj(m_persProjInfo);
+	m_pShadowMapEffect->SetWVP(p.GetWVPTrans());
+	m_pMesh->Render();
+
+}
+
+void CloudModel::Render()
+{
+	m_pLightingTechnique->Enable();
+	m_pLightingTechnique->SetEyeWorldPos(m_pCamera->GetPos());
+
+	Pipeline p;
+	p.Scale(scale, scale, scale);
+	p.WorldPos(positon.x + sinf(m_scale) * 10, positon.y + sinf(m_scale) * 3, positon.z + sinf(0.01*m_scale) * 10);
+	p.Rotate(rotation.x, rotation.y + m_scale, rotation.z);
+
+	p.SetCamera(m_pCamera->GetPos(), m_pCamera->GetTarget(), m_pCamera->GetUp());
+	p.SetPerspectiveProj(m_persProjInfo);
+
+
+	m_pLightingTechnique->SetWVP(p.GetWVPTrans());
+	m_pLightingTechnique->SetWorldMatrix(p.GetWorldTrans());
+
 
 	p.SetCamera(m_spotLight.Position, m_spotLight.Direction, Vector3f(0.0f, 1.0f, 0.0f));
 	m_pLightingTechnique->SetLightWVP(p.GetWVPTrans());

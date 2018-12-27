@@ -12,7 +12,7 @@
 #include "math.h"
 #include "Move.h"
 
-enum State { CHASE = 0, SEARCH, WAIT, ESCAPE, GOBACK, APPROACH };
+enum State { CHASE = 0, SEARCH, WAIT, ESCAPE, GOBACK, APPROACH,HOME };
 
 class Strategy {
 protected:	
@@ -26,9 +26,10 @@ protected:
 	Vector3f enemy;
 	Vector3f protect;
 
-	Vector3f temp;
-	Vector3f EMPTY = Vector3f(0.0f, 0.0f, 0.0f);
+	Vector3f home;
 
+	Vector3f temp;
+	
 	float time;	//time counter
 	DWORD mark;	//time mark
 
@@ -68,7 +69,7 @@ protected:
 	void escape();
 	void goback();
 	void approach();
-	
+
 public:
 	Strategy(){}
 
@@ -90,6 +91,13 @@ public:
 	void setProtect(Vector3f pp) {
 		protect = pp;
 	}
+	void setPos(const Vector3f p) {
+		mypos = p;
+	}
+	void setDir(const Vector3f d) {
+		mydir = d;
+	}
+
 	void update();
 	
 };
@@ -100,6 +108,18 @@ public:
 	FKRStrategy(){}
 	void init();
 	void update();
+	void setEnemy(Vector3f ee, Vector3f e0) {
+		enemy = ee;
+		enemy0 = e0;
+		multi = 1;
+	}
+	void setEnemy(Vector3f ee) {
+		enemy = ee;
+		multi = 0;
+	}
+private:
+	int multi = 0;
+	Vector3f enemy0;
 };
 
 class AntiFKRStrategy :public Strategy
@@ -108,6 +128,11 @@ public:
 	AntiFKRStrategy() {}
 	void init();
 	void update();
+	void likeHome() { homesick = true; }
+
+private:
+	bool homesick = false;
+	void gohome();
 };
 
 class HumanStrategy :public Strategy
@@ -117,20 +142,28 @@ public:
 	void init();
 	void update();
 private:
+
+	void walk_out();
+	void human_escape();
+	void rand_walk();
+
+	bool escape = false;
+
+
 	void inScope() {
 		mypos.x = mypos.x < -10 ? -10 : mypos.x;
-		mypos.x = mypos.x > 10 ? 10 : mypos.x;
+		mypos.x = mypos.x > 13 ? 13 : mypos.x;
 		mypos.z = mypos.z < -5 ? -5 : mypos.z;
-		mypos.z = mypos.z > 8 ? 8 : mypos.z;
+		mypos.z = mypos.z > 12 ? 12 : mypos.z;
 	}
 	void checkBoundry() {
 		Vector3f vtmp = m_move->getV();
 		Vector3f dtmp = mydir;
-		if (abs(mypos.x) == 10) {
+		if (mypos.x == -10 || mypos.x == 13) {
 			vtmp.x = 0;
 			dtmp.x = mypos.x > 0 ? -1 : 1;
 		}
-		if (mypos.z == -5 || mypos.z == 8) {
+		if (mypos.z == -5 || mypos.z == 12) {
 			vtmp.z = 0;
 			dtmp.z = mypos.z > 0 ? -1 : 1;
 		}
