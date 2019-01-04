@@ -129,10 +129,16 @@ public:
 	void init();
 	void update();
 	void likeHome() { homesick = true; }
+	void setDisturb(Vector3f dd) {
+		disturb = dd;
+	}
+	bool disturbed = false;
 
 private:
+	Vector3f disturb;
 	bool homesick = false;
 	void gohome();
+	void getDisturbed();
 };
 
 class HumanStrategy :public Strategy

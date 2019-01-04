@@ -59,3 +59,11 @@ Vector3f Move::ConstantRotate() {
 	//printf("rot : (%f, %f, %f)\n", rotation.x, rotation.y, rotation.z);
 	return rotation+rot_bias;
 }
+
+Vector3f Move::targetRotate(Vector3f now, Vector3f target) {
+	float dx = now.x - target.x ;
+	float dz = target.z - now.z;
+	float ry = norm(atan2(dz, dx));
+	rotation = Vector3f(0, ry, 0)*(180 / 3.14);
+	return rotation;
+}

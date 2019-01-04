@@ -20,7 +20,7 @@
 #include "staticModel.h"
 
 
-enum Mode{STORY=0, NORMAL, MULTIANTI,};
+enum Mode{STORY=0, MULTIFKR, MULTIANTI,};
 class Script {
 public:
 	Script(Mode m) {
@@ -28,6 +28,7 @@ public:
 		m_fkr = NULL;
 		m_antifkr = NULL;
 		m_human = NULL;
+
 	}
 	~Script(){
 		SAFE_DELETE(m_fkr);
@@ -52,4 +53,5 @@ private:
 	
 	//multi
 	AntiFKRModel* m_antifkr0;
+	FKRModel* m_fkr0;
 };

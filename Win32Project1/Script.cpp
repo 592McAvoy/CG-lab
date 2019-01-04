@@ -43,13 +43,21 @@ bool Script::Init(
 
 	}break;
 
-	case NORMAL: {
+	case MULTIFKR: {
+		m_fkr0 = new FKRModel(pCamera, p, l, s);
+		m_fkr0->setScale(0.0006);
+		//m_fkr0->setEnemy(m_antifkr);
+		m_fkr0->setTarget(m_antifkr);
+		if (!m_fkr0->Init("../Content/plane/airplane.obj", "../Content/plane/airplane.png")) {
+			return false;
+		}
 
+		m_antifkr->setDisturb(m_fkr0);
+		m_human->setEnemy(m_fkr);
 	}break;
 
 	case MULTIANTI: {
 		m_antifkr0 = new AntiFKRModel(pCamera, p, l, s);
-
 		m_antifkr0->setScale(0.02);
 		m_antifkr0->setTarget(m_fkr);
 		m_antifkr0->setProtect(m_human);
@@ -59,6 +67,7 @@ bool Script::Init(
 		m_antifkr->likeHome();
 
 		m_fkr->setEnemy(m_antifkr0);
+		m_human->setEnemy(m_fkr);
 
 	}break;
 
@@ -79,15 +88,17 @@ void Script::Render() {
 	switch (m_mode)
 	{
 	case STORY:{
-		Vector3f pos = m_human->getPos();
-		//printf("Pos(%f,%f,%f)\n", pos.x, pos.y, pos.z);
-		m_pCamera->Move(pos); 
+		m_pCamera->Move(m_human->getPos());
 	}
 		break;
-	case NORMAL:
+	case MULTIFKR: {
+		m_fkr0->Render();
+		m_pCamera->Move(m_antifkr->getPos());
+	}
 		break;
 	case MULTIANTI: {
 		m_antifkr0->Render();
+		m_pCamera->Move(m_fkr->getPos());
 	}
 		break;
 	default:
@@ -105,4 +116,8 @@ void Script::ShadowRender() {
 	if (m_mode == MULTIANTI) {
 		m_antifkr0->ShadowRender();
 	}
+	if (m_mode == MULTIFKR) {
+		m_fkr0->ShadowRender();
+	}
+
 }

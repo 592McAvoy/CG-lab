@@ -148,7 +148,7 @@ void Strategy::search() {
 		mark = GetTickCount();
 	}
 	
-	m_move->setA(Vector3f(1.0, 1.0, 1.0));
+	m_move->setA(Vector3f(0.4,0.4, 0.4));
 
 	checkBoundry();
 
@@ -202,13 +202,25 @@ void Strategy::escape() {
 
 }
 
+void AntiFKRStrategy::getDisturbed() {
+	//printf("disturbed\n");
+
+	float xd = disturb.x > mypos.x ? -1.0 : 1.0;
+	float yd = disturb.y > mypos.y ? -1.0 : 1.0;
+	float zd = disturb.z > mypos.z ? -1.0 : 1.0;
+	mydir = Vector3f(xd, yd, zd);
+
+	m_move->setA(reverse(abs(disturb - enemy)) * 2);
+	checkBoundry();
+	mypos = m_move->CalPos(mypos, mydir);
+	myrot = m_move->CalRotate();
+
+
+}
+
 
 void FKRStrategy::update() {
-	/*printf("FKR\n");
-	printf("target %f %f %f\n", target.x, target.y, target.z);
-	printf("enemy %f %f %f\n", enemy.x, enemy.y, enemy.z);
-	printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);*/
-
+	
 	//遇到敌人-escape
 	if (enemy && abs(enemy.x - mypos.x)<3 && abs(enemy.y - mypos.y)<3 && abs(enemy.z - mypos.z)<3) {
 		state = ESCAPE;
@@ -242,11 +254,12 @@ void FKRStrategy::update() {
 }
 
 void AntiFKRStrategy::update() {
-	/*printf("AntiFKR\n");
-	printf("target %f %f %f\n", target.x, target.y, target.z);
-	printf("protect %f %f %f\n", protect.x, protect.y, protect.z);
-	printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);*/
-
+	
+	//遇到干扰-escape
+	if (disturbed && abs(disturb.x - mypos.x)<2 && abs(disturb.y - mypos.y)<2 && abs(disturb.z - mypos.z)<2) {
+		getDisturbed();
+		return;
+	}
 	//目标距离被保护对象太近-chase
 	if ((abs(target.x - protect.x)<5 && abs(target.z - protect.z)<5)
 		|| abs(target.x - mypos.x)<3 && abs(target.y - mypos.y)<3 && abs(target.z - mypos.z)<3) {
@@ -302,12 +315,13 @@ void  AntiFKRStrategy::gohome() {
 
 void HumanStrategy::walk_out() {
 	mydir = Vector3f(1, 0, -1);
-	m_move->setA(Vector3f(0.1, 0, 0.06));
+	m_move->setA(Vector3f(0.1, 0, 0.16));
 
 	checkBoundry();
 
-	mypos = m_move->LimitPos(mypos, mydir, 1.4);
-	myrot = m_move->ConstantRotate();
+	mypos = m_move->LimitPos(mypos, mydir, 1.1);
+	myrot = m_move->ConstantRotate() * 2;
+	//printf("walkout\trot : (%f, %f, %f)\n", myrot.x, myrot.y, myrot.z);
 	inScope();
 }
 
@@ -327,7 +341,9 @@ void HumanStrategy::human_escape() {
 
 	m_move->setA(abs(enemy - mypos)*0.5);
 	mypos = m_move->LimitPos(mypos, mydir, 2);
-	myrot = m_move->ConstantRotate();
+	//myrot = m_move->ConstantRotate() * 2;
+	myrot = m_move->targetRotate(home, mypos) + Vector3f(0,5.0f,0);
+	//printf("escape\trot : (%f, %f, %f)\n", myrot.x, myrot.y, myrot.z);
 
 }
 	
@@ -347,7 +363,8 @@ void HumanStrategy::rand_walk() {
 		checkBoundry();
 
 		mypos = m_move->LimitPos(mypos, mydir, 1.8);
-		myrot = m_move->ConstantRotate();
+		myrot = m_move->ConstantRotate() * 2;
+		//printf("walk\trot : (%f, %f, %f)\n", myrot.x, myrot.y, myrot.z);
 		inScope();
 	}
 
@@ -356,7 +373,7 @@ void HumanStrategy::update() {
 	//printf("mypos %f %f %f\n", mypos.x, mypos.y, mypos.z);
 
 	//FKR太近-escape
-	if (enemy && (abs(enemy.x - mypos.x)<2 && abs(enemy.z - mypos.z)<2)){
+	if (enemy && (abs(enemy.x - mypos.x)<2 && abs(enemy.z - mypos.z)<2 && abs(enemy.y - mypos.y)<8)){
 		//printf("escape\n");
 		if (!escape) {
 			m_move->setV(0.4*(home - mypos));
@@ -365,7 +382,7 @@ void HumanStrategy::update() {
 		human_escape();
 	}
 	//离开home
-	else if (abs(home.x - mypos.x) <3 || abs(home.z - mypos.z) < 3) {
+	else if (abs(home.x - mypos.x) <2 || abs(home.z - mypos.z) < 2) {
 		//printf("walk out\n");
 		escape = false;
 		walk_out();

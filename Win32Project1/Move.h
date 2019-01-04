@@ -75,6 +75,8 @@ public:
 
 	Vector3f LimitPos(Vector3f p, Vector3f direction, float limitV);
 
+	Vector3f targetRotate(Vector3f now, Vector3f target);
+
 	
 };
 

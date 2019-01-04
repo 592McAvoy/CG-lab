@@ -131,6 +131,18 @@ public:
 			return false;
 		}
 
+		/*cv = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
+		cv->setInfo(10.0f, Vector3f(0.0f, 0, 5), Vector3f(0.0f, 180.0f, 0.0f));
+		if (!cv->Init("../Content/cv/m1.obj", "../Content/cv/9.jpg")) {
+			return false;
+		}
+
+		init = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
+		init->setInfo(10.0f, Vector3f(1.5f, 0, 5), Vector3f(0.0f, 180.0f, 0.0f));
+		if (!init->Init("../Content/cv/init_m.obj", "../Content/cv/9.jpg")) {
+			return false;
+		}*/
+
 		/*m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
 		if (!m_pSkyBox->Init(".",
 			"../Content/1.jpg",
@@ -179,6 +191,9 @@ public:
 		m_cloud0->ShadowRender();
 		m_cloud1->ShadowRender();
 
+		/*cv->ShadowRender();
+		init->ShadowRender();*/
+
 		
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -201,6 +216,9 @@ public:
 		m_cloud0->Render();
 		m_cloud1->Render();
 
+		/*cv->Render();
+		init->Render();*/
+
 		m_pQuad->Render();	
 
 	}
@@ -213,17 +231,6 @@ public:
 		case OGLDEV_KEY_q:
 			GLUTBackendLeaveMainLoop();
 			break;
-		case OGLDEV_KEY_a:
-			changeAmbLight(0.05f);
-			break;
-		case OGLDEV_KEY_s:
-			changeAmbLight(-0.05f);
-			break;
-		case OGLDEV_KEY_z:
-			changeDiffLight(0.05f);
-			break;
-		case OGLDEV_KEY_x:
-			changeDiffLight(-0.05f);
 		default:
 			m_pGameCamera->OnKeyboard(OgldevKey);
 		}
@@ -251,10 +258,6 @@ private:
 	Camera* m_pGameCamera;  
 	PersProjInfo m_persProjInfo;
 	
-	/*FKRModel* m_fkr;
-	AntiFKRModel* m_antifkr;
-	HumanModel* m_human;*/
-
 	StaticModel* m_house;
 	StaticModel* m_house1;
 	StaticModel* m_pQuad;
@@ -263,24 +266,12 @@ private:
 	CloudModel* m_cloud0;
 	CloudModel* m_cloud1;
 
+	StaticModel* cv;
+	StaticModel* init;
+
 	SkyBox* m_pSkyBox;
 
 	Script* m_script;
-
-	void changeAmbLight(float ff) {
-		/*m_fkr->changeAmbLight(ff);
-		m_antifkr->changeAmbLight(ff);
-		m_human->changeAmbLight(ff);*/
-		m_house->changeAmbLight(ff);
-		m_house1->changeAmbLight(ff);
-	}
-	void changeDiffLight(float ff) {
-		/*m_fkr->changeDiffLight(ff);
-		m_antifkr->changeDiffLight(ff);
-		m_human->changeDiffLight(ff);*/
-		m_house->changeDiffLight(ff);
-		m_house1->changeDiffLight(ff);
-	}
 
 };
 

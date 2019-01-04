@@ -171,10 +171,7 @@ Vector3f& Camera::GetClickPos(int x, int y) {
 	return View;
 }
 
-const int modelLimitX = 15;
-const int modelLimitY = 6;
-const int modelLimitZ = 8;
-const int modelMargin = 1;
+
 void Camera::Move(Vector3f pos)
 {
 	const float DeltaX = pos.x - m_focusPos.x;
@@ -185,9 +182,6 @@ void Camera::Move(Vector3f pos)
 
 	m_AngleH += (float)DeltaX * 3.0f;
 	m_AngleV += (float)DeltaY * 0.3f;
-	//m_pos += m_target * STEP_SCALE;
-	//printf("angelH %f\tangleV %f\n", m_AngleH, m_AngleH);
-
 	
 	Update();
 }

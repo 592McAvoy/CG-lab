@@ -131,6 +131,11 @@ public:
 	void setProtect(DynamicModel* protect) {
 		m_protect = protect;
 	}
+	void setDisturb(DynamicModel* disturb) {
+		m_disturb = disturb;
+		m_strategy->disturbed = true;
+	}
+
 	void setInitPos(Vector3f init) {
 		m_strategy->setPos(init);
 	}
@@ -141,12 +146,15 @@ private:
 	AntiFKRStrategy* m_strategy;
 	DynamicModel* m_protect;
 	DynamicModel* m_target;
+	DynamicModel* m_disturb = NULL;
 
 	void updateInfo() {
 		if (m_protect)
 			m_strategy->setProtect(m_protect->getPos());
 		if (m_target)
 			m_strategy->setTarget(m_target->getPos());
+		if (m_disturb)
+			m_strategy->setDisturb(m_disturb->getPos());
 	}
 };
 
