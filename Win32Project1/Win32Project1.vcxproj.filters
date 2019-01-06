@@ -37,6 +37,9 @@
     <None Include="shaderFile\shadow_map.vs">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaderFile\ps_update.gs">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Move.h">
@@ -128,9 +131,6 @@
     <ClCompile Include="ogldev_xcb_control.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="random_texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="technique.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -171,6 +171,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="billboard_technique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ps_update_technique.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tutorial28.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="random_texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

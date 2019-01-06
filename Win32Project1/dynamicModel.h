@@ -1,9 +1,11 @@
 #pragma once
+#include "ogldev_engine_common.h"
 #include "ogldev_camera.h"
 #include "mesh.h"
-//#include "ogldev_basic_lighting.h"
+
 #include "lighting_technique.h"
 #include "strategy.h"
+#include "particle_system.h"
 
 class DynamicModel
 {
@@ -40,7 +42,6 @@ public:
 protected:
 	LightingTechnique *m_pLightingTechnique;
 	ShadowMapTechnique* m_pShadowMapEffect;
-	//BasicLightingTechnique* m_pLightingTechnique;
 	
 	DirectionalLight m_dirLight;
 	SpotLight m_spotLight;
@@ -93,6 +94,7 @@ private:
 	DynamicModel* m_enemy;
 	DynamicModel* m_enemy0;
 	DynamicModel* m_target;
+
 
 	void updateInfo() {
 		if (m_enemy0)

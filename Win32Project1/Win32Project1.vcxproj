@@ -153,6 +153,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="shaderFile\ps_update.gs" />
     <None Include="shaderFile\shadow_map.fs" />
     <None Include="shaderFile\shadow_map.vs" />
     <None Include="shaderFile\shadow_volume.fs" />
@@ -162,6 +163,7 @@
     <None Include="skybox.vs" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="billboard_technique.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cubemap_texture.cpp" />
     <ClCompile Include="glut_backend.cpp" />
@@ -187,6 +189,8 @@
     <ClCompile Include="ogldev_vulkan_core.cpp" />
     <ClCompile Include="ogldev_win32_control.cpp" />
     <ClCompile Include="ogldev_xcb_control.cpp" />
+    <ClCompile Include="particle_system.cpp" />
+    <ClCompile Include="ps_update_technique.cpp" />
     <ClCompile Include="random_texture.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="shadow_volume_technique.cpp" />
@@ -198,6 +202,7 @@
     <ClCompile Include="technique.cpp" />
     <ClCompile Include="test\lighting_technique.cpp" />
     <ClCompile Include="test\shadow_map_technique.cpp" />
+    <ClCompile Include="tutorial28.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="dynamicModel.h" />

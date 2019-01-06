@@ -27,7 +27,6 @@ DynamicModel::~DynamicModel()
 	SAFE_DELETE(m_pShadowMapEffect);
 	SAFE_DELETE(m_pLightingTechnique);
 	SAFE_DELETE(m_pMesh);
-
 }
 
 
@@ -89,10 +88,10 @@ void FKRModel::Render()
 	m_pLightingTechnique->SetEyeWorldPos(m_pCamera->GetPos());
 
 	updateInfo();//更新与本模型有交互的模型的位置信息
+
 	m_strategy->update();
 	m_rot = m_strategy->getRot();
 	m_pos = m_strategy->getPos();
-	
 
 	Pipeline p;
 	p.Scale(m_scale, m_scale, m_scale);

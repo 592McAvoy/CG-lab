@@ -230,12 +230,12 @@ void FKRStrategy::update() {
 	}
 	//目标离自己距离太远-search
 	else if (!(abs(target.x - mypos.x)<15
-		&& abs(target.y - mypos.y)<10
+		&& abs(target.y - mypos.y)<15
 		&& abs(target.z - mypos.z)<10)) {
 		state = SEARCH;
 	}
 	//离目标距离不远-approach
-	else if (abs(target.x - mypos.x) < 5 && abs(target.y - mypos.y) < 5 && abs(target.z - mypos.z) < 5) {
+	else if (abs(target.x - mypos.x) < 3 && abs(target.y - mypos.y) < 8 && abs(target.z - mypos.z) < 3) {
 		state = APPROACH;
 	}
 	//追逐目标
@@ -315,11 +315,11 @@ void  AntiFKRStrategy::gohome() {
 
 void HumanStrategy::walk_out() {
 	mydir = Vector3f(1, 0, -1);
-	m_move->setA(Vector3f(0.1, 0, 0.16));
+	m_move->setA(Vector3f(0.2, 0, 0.26));
 
 	checkBoundry();
 
-	mypos = m_move->LimitPos(mypos, mydir, 1.1);
+	mypos = m_move->LimitPos(mypos, mydir, 1.3);
 	myrot = m_move->ConstantRotate() * 2;
 	//printf("walkout\trot : (%f, %f, %f)\n", myrot.x, myrot.y, myrot.z);
 	inScope();
@@ -358,7 +358,7 @@ void HumanStrategy::rand_walk() {
 			mark = GetTickCount();
 		}
 
-		m_move->setA(Vector3f(0.12, 0, 0.10));
+		m_move->setA(Vector3f(0.22, 0, 0.20));
 
 		checkBoundry();
 

@@ -99,7 +99,6 @@ public:
 	}
 
 	void update();
-	
 };
 
 class FKRStrategy :public Strategy

@@ -1,7 +1,9 @@
 #include <math.h>
+
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
+#include "ogldev_engine_common.h"
 #include "ogldev_app.h"
 #include "ogldev_util.h"
 #include "ogldev_pipeline.h"
@@ -12,6 +14,7 @@
 //#include "ogldev_basic_lighting.h"
 #include "ogldev_shadow_map_fbo.h"
 #include "shadow_map_technique.h"
+#include "particle_system.h"
 
 #include "skybox.h"
 #include "dynamicModel.h"
@@ -56,6 +59,8 @@ public:
 		m_persProjInfo.Width = WINDOW_WIDTH;
 		m_persProjInfo.zNear = 1.0f;
 		m_persProjInfo.zFar = 50.0f;
+
+		m_currentTimeMillis = GetCurrentTimeMillis();
 	}
 
 
@@ -143,16 +148,11 @@ public:
 			return false;
 		}*/
 
-		/*m_pSkyBox = new SkyBox(m_pGameCamera, m_persProjInfo);
-		if (!m_pSkyBox->Init(".",
-			"../Content/1.jpg",
-			"../Content/1.jpg",
-			"../Content/1.jpg",
-			"../Content/1.jpg",
-			"../Content/1.jpg",
-			"../Content/1.jpg")) {
+
+		Vector3f ParticleSystemPos = Vector3f(5.0f, 15.0f, 4.5f);
+		if (!m_particleSystem.InitParticleSystem(ParticleSystemPos)) {
 			return false;
-		}*/
+		}
 
 		return true;
 	}
@@ -201,6 +201,12 @@ public:
 
 	void RenderPass()
 	{
+		long long TimeNowMillis = GetCurrentTimeMillis();
+		assert(TimeNowMillis >= m_currentTimeMillis);
+		unsigned int DeltaTimeMillis = (unsigned int)(TimeNowMillis - m_currentTimeMillis);
+		m_currentTimeMillis = TimeNowMillis;
+		m_pGameCamera->OnRender();
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		m_shadowMapFBO.BindForReading(GL_TEXTURE1);
@@ -220,6 +226,14 @@ public:
 		init->Render();*/
 
 		m_pQuad->Render();	
+
+
+		Pipeline p;
+		p.Scale(200.0f, 200.0f, 1.0f);
+		p.Rotate(90.0f, 0.0, 0.0f);
+		p.SetCamera(m_pGameCamera->GetPos(), m_pGameCamera->GetTarget(), m_pGameCamera->GetUp());
+		p.SetPerspectiveProj(m_persProjInfo);
+		m_particleSystem.Render(DeltaTimeMillis, p.GetVPTrans(), m_pGameCamera->GetPos());
 
 	}
 
@@ -273,6 +287,8 @@ private:
 
 	Script* m_script;
 
+	long long m_currentTimeMillis;
+	ParticleSystem m_particleSystem;
 };
 
 
