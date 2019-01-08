@@ -128,6 +128,11 @@
         			m_pGameCamera->OnKeyboard(OgldevKey);
         		}
         	}    
+         
+         void PassiveMouseCB(int x, int y)
+        {
+          m_pGameCamera->OnMouse(x, y);
+        }
     
     2.跟踪
     定义了相机的Move方法：
