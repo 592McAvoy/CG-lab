@@ -222,10 +222,10 @@ void AntiFKRStrategy::getDisturbed() {
 void FKRStrategy::update() {
 	
 	//遇到敌人-escape
-	if (enemy && abs(enemy.x - mypos.x)<3 && abs(enemy.y - mypos.y)<3 && abs(enemy.z - mypos.z)<3) {
+	if (abs(enemy.x - mypos.x)<5 && abs(enemy.y - mypos.y)<5 && abs(enemy.z - mypos.z)<5) {
 		state = ESCAPE;
 	}
-	else if (enemy0 && abs(enemy0.x - mypos.x)<3 && abs(enemy0.y - mypos.y)<3 && abs(enemy0.z - mypos.z)<3) {
+	else if (enemy0 && abs(enemy0.x - mypos.x)<5 && abs(enemy0.y - mypos.y)<5 && abs(enemy0.z - mypos.z)<5) {
 		state = ESCAPE;
 	}
 	//目标离自己距离太远-search
@@ -261,8 +261,8 @@ void AntiFKRStrategy::update() {
 		return;
 	}
 	//目标距离被保护对象太近-chase
-	if ((abs(target.x - protect.x)<5 && abs(target.z - protect.z)<5)
-		|| abs(target.x - mypos.x)<3 && abs(target.y - mypos.y)<3 && abs(target.z - mypos.z)<3) {
+	if ((abs(target.x - protect.x)<6 && abs(target.z - protect.z)<6)
+		|| abs(target.x - mypos.x)<5 && abs(target.y - mypos.y)<5 && abs(target.z - mypos.z)<5) {
 		if (state != CHASE)
 			m_move->setV(0.1*(target - mypos));
 		state = CHASE;

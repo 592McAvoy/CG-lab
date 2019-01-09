@@ -93,7 +93,8 @@ public:
 
 		m_pGameCamera = new Camera(WINDOW_WIDTH, WINDOW_HEIGHT, Pos, Target, Up);
 
-		m_script = new Script(STORY);
+		//¿ÉÑ¡Mode { STORY = 0, MULTIFKR, MULTIANTI };
+		m_script = new Script(MULTIFKR);
 		if (!m_script->Init(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight)) {
 			return false;
 		}
@@ -132,7 +133,7 @@ public:
 
 		m_pQuad = new StaticModel(m_pGameCamera, m_persProjInfo, m_dirLight, m_spotLight);
 		m_pQuad->setInfo(25.0f, Vector3f(0.0f, -6, 5), Vector3f(90.0f, 75.0f, 0.0f));
-		if (!m_pQuad->Init("../Content/quad.obj", "../Content/grass1.jpg")) {
+		if (!m_pQuad->Init("../Content/quad.obj", "../Content/grass4.jpg")) {
 			return false;
 		}
 
@@ -170,8 +171,6 @@ public:
 		
 		ShadowMapPass();
 		RenderPass();
-
-		//m_pSkyBox->Render();
 		
 		glutSwapBuffers();
 	}
